@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Folder, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Upload, Folder, Wrench, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function DeskMonitor({
   gameState,
@@ -7,143 +7,128 @@ export default function DeskMonitor({
   className = '',
   isDisplayFlashing = false,
 }) {
-  const [showCooldownTooltip, setShowCooldownTooltip] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   if (!gameState) return null;
 
   const isBlackout = gameState.isBlackout;
+  const isLightOn = gameState.isLightOn && !isBlackout;
   const cooldown = Math.ceil(gameState.omrCooldown || 0);
-  const isReady = cooldown <= 0 && !isBlackout;
+
+  const isInternetDown = gameState.maintenance?.internet === 'ERROR';
+  const hasMaintError = ['internet', 'cameras', 'sounds', 'vents'].some(s => gameState.maintenance?.[s] === 'ERROR');
+  const hasSuspiciousExe = gameState.ryan?.enabled && gameState.ryan.files?.some(f => f.type === 'exe' && !f.deleted);
 
   const handleClick = (e) => {
     e.stopPropagation();
     if (isBlackout) return;
-
-    if (cooldown > 0) {
-      setShowCooldownTooltip(true);
-      setTimeout(() => setShowCooldownTooltip(false), 2200);
-      return;
-    }
-
     onOpenModal();
   };
-
-  const isLightOn = gameState.isLightOn && !isBlackout;
 
   return (
     <div
       onClick={handleClick}
       className={`relative select-none cursor-pointer group ${className}`}
-      title={isReady ? 'Desk Terminal: Click to Upload OMR' : `Terminal Cooldown: ${cooldown}s remaining`}
+      title="Security Desk Terminal: Click to open Upload, Files & Maintain"
     >
-      {/* Realistic Contact Shadow on Counter Surface */}
+      {/* Contact Shadow on Counter Surface */}
       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[72%] h-2.5 bg-black/85 blur-[2.5px] rounded-full pointer-events-none" />
 
-      {/* Outer Monitor Frame (monitor.webp) with dynamic room lighting */}
+      {/* Outer Monitor Frame (monitor.webp) */}
       <img
-        src="./assets/images/monitor.webp"
+        src="./Fnak photos/monitor.webp"
         alt="Security Desk Monitor"
         className={`w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)] pointer-events-none transition-all duration-200 group-hover:scale-[1.02] ${
           !isLightOn && !isBlackout ? 'brightness-[0.72] contrast-110' : ''
         } ${isBlackout ? 'brightness-[0.08]' : ''}`}
       />
 
-      {/* Screen Area (Positioned precisely within the monitor bezel) */}
+      {/* Screen Area (Positioned precisely within monitor bezel) */}
       <div
         className={`absolute top-[7.5%] left-[10.5%] w-[79%] h-[62%] rounded-[2px] overflow-hidden flex flex-col justify-between transition-opacity duration-150 ${
-          isBlackout ? 'bg-black' : 'bg-[#06141d]'
+          isBlackout ? 'bg-black' : 'bg-neutral-950'
         }`}
       >
         {!isBlackout && (
           <>
-            {/* Quick screen static flash when an enemy moves (no slow fade) */}
+            {/* Display pc-wallpaper.jpg from photos directory (Item 11) */}
+            <div
+              className="absolute inset-0 bg-cover bg-center pointer-events-none filter brightness-90 contrast-110"
+              style={{ backgroundImage: `url('./Fnak photos/pc-wallpaper.jpg')` }}
+            />
+
+            {/* Quick screen static flash when an enemy moves */}
             {isDisplayFlashing && (
               <div className="absolute inset-0 z-30 pointer-events-none bg-black flex items-center justify-center">
                 <div className="absolute inset-0 static-fuzz opacity-85 pointer-events-none" />
                 <div className="absolute top-[35%] inset-x-0 h-1.5 bg-white/50 mix-blend-screen pointer-events-none" />
               </div>
             )}
-            {/* Screen Scanlines and Cathode Glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-950/30 via-transparent to-black/60 pointer-events-none z-10" />
+
+            {/* Cathode scanlines and vignette */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-950/20 via-transparent to-black/60 pointer-events-none z-10" />
             <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.35)_50%)] bg-[length:100%_4px] pointer-events-none z-10 opacity-70" />
 
             {/* Desktop Top Status Bar */}
-            <div className="relative z-20 bg-neutral-950/80 px-1 py-0.5 border-b border-neutral-800 flex items-center justify-between text-[7px] sm:text-[8px] font-mono text-cyan-400">
-              <span className="truncate">SEC-OS // LIGIN NET</span>
+            <div className="relative z-20 bg-black/80 px-1 py-0.5 border-b border-neutral-800 flex items-center justify-between text-[7px] sm:text-[8px] font-mono text-cyan-400">
+              <span className="truncate">UNAK-OS v2.0</span>
               <div className="flex items-center gap-1">
                 <div
                   className={`w-1.5 h-1.5 rounded-full ${
-                    isReady ? 'bg-emerald-400 animate-pulse' : 'bg-amber-500'
+                    isInternetDown ? 'bg-red-500 animate-ping' : hasMaintError ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'
                   }`}
                 />
-                <span className="text-[6px] sm:text-[7px] text-gray-400">
-                  {isReady ? 'ONLINE' : `${cooldown}s`}
+                <span className="text-[6px] sm:text-[7px] text-gray-300">
+                  {isInternetDown ? 'NO-NET' : hasMaintError ? 'MAINT!' : 'ONLINE'}
                 </span>
               </div>
             </div>
 
-            {/* Center Desktop Icon: "Upload OMR?" Folder */}
-            <div className="relative z-20 flex-1 flex flex-col items-center justify-center p-1">
-              <div className="relative group/folder flex flex-col items-center">
-                {/* Folder & Thumbnail Container */}
-                <div className="relative w-9 h-8 sm:w-11 sm:h-10 md:w-12 md:h-11 flex items-center justify-center">
-                  {/* Folder Icon */}
-                  <Folder
-                    size={36}
-                    className="text-amber-400 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] fill-amber-500/30"
-                  />
-                  {/* Embedded thumbnail preview from upload-confirmation.png */}
-                  <div className="absolute inset-x-1.5 top-2.5 bottom-1 rounded overflow-hidden border border-amber-300/40 bg-black/60 flex items-center justify-center">
-                    <img
-                      src="./assets/images/upload-confirmation.png"
-                      alt="Upload OMR Folder"
-                      className="w-full h-full object-cover opacity-90"
-                    />
-                  </div>
-                </div>
-
-                {/* Folder Label */}
-                <span className="mt-0.5 text-[8px] sm:text-[9px] font-bold text-white font-mono bg-black/75 px-1 py-0.2 rounded border border-neutral-700 tracking-tight text-center leading-tight shadow">
-                  Upload OMR?
+            {/* Center Desktop: 3 Buttons (Upload, Files, Maintain) (Item 11) */}
+            <div className="relative z-20 flex-1 flex items-center justify-center p-1 gap-1 sm:gap-2">
+              {/* Button 1: Upload */}
+              <div className="flex flex-col items-center bg-black/70 hover:bg-cyan-950/80 border border-cyan-500/60 p-1 rounded transition group/btn cursor-pointer">
+                <Upload size={14} className="text-cyan-400 group-hover/btn:scale-110" />
+                <span className="text-[7px] font-bold text-white mt-0.5 uppercase tracking-tighter">
+                  UPLOAD
                 </span>
+              </div>
 
-                {/* Status Badge */}
-                <div className="mt-0.5">
-                  {isReady ? (
-                    <span className="text-[6px] sm:text-[7px] font-bold text-emerald-300 font-mono bg-emerald-950/80 border border-emerald-500/50 px-1 py-0.2 rounded flex items-center gap-0.5 animate-pulse">
-                      <CheckCircle2 size={7} />
-                      <span>READY ({gameState.omrUploadsInCycle}/{gameState.omrQuota})</span>
-                    </span>
-                  ) : (
-                    <span className="text-[6px] sm:text-[7px] font-bold text-amber-300 font-mono bg-amber-950/80 border border-amber-500/50 px-1 py-0.2 rounded flex items-center gap-0.5">
-                      <Clock size={7} />
-                      <span>WAIT {cooldown}s</span>
-                    </span>
-                  )}
-                </div>
+              {/* Button 2: Files */}
+              <div className="flex flex-col items-center bg-black/70 hover:bg-amber-950/80 border border-amber-500/60 p-1 rounded transition group/btn cursor-pointer relative">
+                <Folder size={14} className="text-amber-400 group-hover/btn:scale-110" />
+                <span className="text-[7px] font-bold text-white mt-0.5 uppercase tracking-tighter">
+                  FILES
+                </span>
+                {hasSuspiciousExe && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping absolute -top-0.5 -right-0.5" />
+                )}
+              </div>
+
+              {/* Button 3: Maintain */}
+              <div className="flex flex-col items-center bg-black/70 hover:bg-emerald-950/80 border border-emerald-500/60 p-1 rounded transition group/btn cursor-pointer relative">
+                <Wrench size={14} className="text-emerald-400 group-hover/btn:scale-110" />
+                <span className="text-[7px] font-bold text-white mt-0.5 uppercase tracking-tighter">
+                  MAINTAIN
+                </span>
+                {hasMaintError && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping absolute -top-0.5 -right-0.5" />
+                )}
               </div>
             </div>
 
             {/* Taskbar at bottom of monitor screen */}
-            <div className="relative z-20 bg-neutral-950/90 px-1 py-0.5 border-t border-neutral-800 flex items-center justify-between text-[6px] sm:text-[7px] font-mono text-gray-400">
+            <div className="relative z-20 bg-black/90 px-1 py-0.5 border-t border-neutral-800 flex items-center justify-between text-[6px] sm:text-[7px] font-mono text-gray-400">
               <span className="text-emerald-400">BATCH #{gameState.omrUploadCount}</span>
-              <span className="text-gray-500">{isReady ? 'CLICK TO OPEN' : 'COOLING DOWN'}</span>
+              <span className="text-yellow-400 font-bold animate-pulse">CLICK TO OPEN</span>
             </div>
           </>
         )}
       </div>
 
-      {/* Screen Glare & Lighting Effect on Monitor */}
+      {/* Screen Glare Effect */}
       {!isBlackout && (
         <div className="absolute top-[8%] left-[11%] w-[78%] h-[30%] bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-t" />
-      )}
-
-      {/* Floating Cooldown Warning Tooltip */}
-      {showCooldownTooltip && (
-        <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-30 bg-black/95 border-2 border-amber-500 text-amber-300 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-xl flex items-center gap-1.5 whitespace-nowrap animate-bounce pointer-events-none">
-          <AlertCircle size={12} className="text-amber-400" />
-          <span>COOLDOWN: {cooldown}s REMAINING</span>
-        </div>
       )}
     </div>
   );
