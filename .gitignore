@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.exe
+.DS_Store
+*.log
+guide.txt
+public/Fnak photos/
+
