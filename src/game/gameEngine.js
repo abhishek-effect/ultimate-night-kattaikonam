@@ -1,80 +1,86 @@
-// Game Engine for Five Nights at Kattaikonam (FNAK)
+// Game Engine for Ultimate Night @ Kattaikonam (UNAK)
 
-export const CAMERAS = [
-  { id: 'CAM_1', name: 'Physics Lab', sub: 'Room A', image: './assets/images/cam-room-a.jpg', x: 20, y: 30 },
-  { id: 'CAM_2', name: 'Main Corridor', sub: 'Corridor A', image: './assets/images/cam-corridor-a.jpg', x: 50, y: 35 },
-  { id: 'CAM_3', name: 'Supply Hallway', sub: 'Corridor B', image: './assets/images/cam-corridor-b.jpg', x: 80, y: 40 },
-  { id: 'CAM_4', name: 'Central Stairs', sub: 'Staircase', image: './assets/images/cam-stairs.jpg', x: 30, y: 70 },
-  { id: 'CAM_5', name: 'Corridor C', sub: 'Hallway C', image: './assets/images/cam-corridor-c.jpg', x: 65, y: 75 },
-  { id: 'CAM_6', name: 'Balcony', sub: 'Terrace', image: './assets/images/cam-balcony.jpg', x: 85, y: 75 },
+export const ALL_ROOMS = [
+  { id: 'ROOM_A', name: 'Physics Lab', sub: 'Room A', image: './Fnak photos/Rooms/RoomA.jpg', group: null, cx: 240, cy: 75, w: 90, h: 32 },
+  { id: 'CORRIDOR_A', name: 'Main Corridor', sub: 'Corridor A', image: './Fnak photos/Rooms/CorridorA.jpg', group: null, cx: 240, cy: 155, w: 100, h: 32 },
+  { id: 'CORRIDOR_B', name: 'Supply Hall', sub: 'Corridor B', image: './Fnak photos/Rooms/CorridorB.jpg', group: null, cx: 100, cy: 225, w: 85, h: 32 },
+  { id: 'CORRIDOR_C', name: 'Corridor C', sub: 'Front of Office', image: './Fnak photos/Rooms/CorridorC.jpg', group: null, cx: 240, cy: 235, w: 95, h: 32 },
+  { id: 'STAIRS', name: 'Central Stairs', sub: 'Staircase', image: './Fnak photos/Stairs.jpg', group: null, cx: 365, cy: 155, w: 90, h: 32 },
+  { id: 'BALCONY', name: 'Balcony', sub: 'Terrace', image: './Fnak photos/Rooms/balcony.jpg', group: null, cx: 105, cy: 75, w: 85, h: 32 },
+  { id: 'CORRIDOR_X', name: 'Corridor X', sub: 'West Corridor', image: './Fnak photos/Rooms/CorridorX.jpg', group: null, cx: 110, cy: 155, w: 85, h: 32 },
+  { id: 'B_127', name: 'Room B-127', sub: 'Classroom B', image: './Fnak photos/Rooms/B-127.jpg', group: null, cx: 370, cy: 75, w: 90, h: 32 },
+  { id: 'ALLEY', name: 'Alleyway', sub: 'Service Alley', image: './Fnak photos/Rooms/alley.jpg', group: null, cx: 45, cy: 115, w: 75, h: 30 },
+  { id: 'CLASSROOM', name: 'Classroom', sub: 'Main Hall', image: './Fnak photos/Rooms/classroom.jpg', group: null, cx: 180, cy: 30, w: 85, h: 30 },
+  { id: 'ELEVATOR', name: 'Elevator', sub: 'Lift Lobby', image: './Fnak photos/Rooms/elevator.jpg', group: null, cx: 370, cy: 235, w: 80, h: 30 },
+  { id: 'GEOTECH', name: 'Geotech Lab', sub: 'Civil Dept', image: './Fnak photos/Rooms/Geotechlab.jpg', group: null, cx: 415, cy: 305, w: 85, h: 30 },
+  { id: 'PLAYGROUND', name: 'Playground', sub: 'Outer Grounds', image: './Fnak photos/Rooms/Playground.jpg', group: null, cx: 65, cy: 30, w: 85, h: 30 },
+  { id: 'ENTRANCE_1', name: 'Entrance (Day)', sub: 'Main Gate 1', image: './Fnak photos/Rooms/Entrance.jpg', group: 'ENTRANCE', cx: 110, cy: 305, w: 95, h: 32 },
+  { id: 'ENTRANCE_2', name: 'Entrance (Eve)', sub: 'Main Gate 2', image: './Fnak photos/Rooms/Entrance-2.jpg', group: 'ENTRANCE', cx: 110, cy: 305, w: 95, h: 32 },
+  { id: 'STAFF_ROOM_1', name: 'Staff Room 1', sub: 'Faculty Office A', image: './Fnak photos/Rooms/staff-room.jpg', group: 'STAFF_ROOM', cx: 420, cy: 115, w: 90, h: 32 },
+  { id: 'STAFF_ROOM_2', name: 'Staff Room 2', sub: 'Faculty Office B', image: './Fnak photos/Rooms/staff-room2.jpg', group: 'STAFF_ROOM', cx: 420, cy: 115, w: 90, h: 32 },
 ];
 
+export const CAMERAS = ALL_ROOMS;
 
-export const HOURLY_AI_SCHEDULE = {
-  1: [
-    // 12 AM: Peaceful orientation (all 0)
-    { hour: 0, aadesh: 0, dipu: 0, ab: 0, johann: 0 },
-    // 1 AM: Aadesh awakens (Bonnie-like roaming starts)
-    { hour: 1, aadesh: 1, dipu: 0, ab: 0, johann: 0 },
-    // 2 AM: Aadesh picks up pace
-    { hour: 2, aadesh: 2, dipu: 0, ab: 0, johann: 0 },
-    // 3 AM: Dipu stirs in CAM 3 (Foxy begins stirring)
-    { hour: 3, aadesh: 3, dipu: 1, ab: 1, johann: 0 },
-    // 4 AM: Dipu and Aadesh active
-    { hour: 4, aadesh: 4, dipu: 2, ab: 1, johann: 0 },
-    // 5 AM: Final hour pressure
-    { hour: 5, aadesh: 4, dipu: 3, ab: 2, johann: 0 },
-  ],
-  2: [
-    // Night 2: Johann awakens! (Balcony lurker joins)
-    { hour: 0, aadesh: 2, dipu: 1, ab: 0, johann: 1 },
-    { hour: 1, aadesh: 3, dipu: 1, ab: 1, johann: 2 },
-    { hour: 2, aadesh: 4, dipu: 2, ab: 1, johann: 2 },
-    { hour: 3, aadesh: 5, dipu: 3, ab: 2, johann: 3 },
-    { hour: 4, aadesh: 5, dipu: 4, ab: 3, johann: 4 },
-    { hour: 5, aadesh: 6, dipu: 4, ab: 4, johann: 5 },
-  ],
-  3: [
-    // Night 3: Full escalation! Abhishek door breaker active, generator unlocked
-    { hour: 0, aadesh: 4, dipu: 3, ab: 3, johann: 3 },
-    { hour: 1, aadesh: 5, dipu: 3, ab: 4, johann: 4 },
-    { hour: 2, aadesh: 6, dipu: 4, ab: 5, johann: 3 }, // Johann brief lull
-    { hour: 3, aadesh: 7, dipu: 5, ab: 6, johann: 5 },
-    { hour: 4, aadesh: 8, dipu: 6, ab: 7, johann: 6 },
-    { hour: 5, aadesh: 9, dipu: 7, ab: 8, johann: 7 },
-  ],
-  4: [
-    // Night 4: Lockdown
-    { hour: 0, aadesh: 7, dipu: 5, ab: 6, johann: 5 },
-    { hour: 1, aadesh: 8, dipu: 6, ab: 7, johann: 6 },
-    { hour: 2, aadesh: 9, dipu: 7, ab: 8, johann: 6 }, // slight lull
-    { hour: 3, aadesh: 10, dipu: 8, ab: 9, johann: 8 },
-    { hour: 4, aadesh: 12, dipu: 9, ab: 11, johann: 10 },
-    { hour: 5, aadesh: 13, dipu: 11, ab: 12, johann: 11 },
-  ],
-  5: [
-    // Night 5: The Final Shift (True Terror)
-    { hour: 0, aadesh: 10, dipu: 8, ab: 9, johann: 8 },
-    { hour: 1, aadesh: 12, dipu: 10, ab: 11, johann: 10 },
-    { hour: 2, aadesh: 13, dipu: 11, ab: 12, johann: 10 }, // 2 AM calm before the storm
-    { hour: 3, aadesh: 15, dipu: 13, ab: 14, johann: 13 },
-    { hour: 4, aadesh: 17, dipu: 15, ab: 16, johann: 15 },
-    { hour: 5, aadesh: 18, dipu: 17, ab: 18, johann: 17 },
-  ],
+export const VENT_ROOMS = [
+  { id: 'VENT_1', name: 'Vent Entry', sub: 'Duct Intake', image: './Fnak photos/Vents/vents-1.jpg', cx: 80, cy: 60, w: 80, h: 30 },
+  { id: 'VENT_2', name: 'Vent Shaft A', sub: 'Upper Bend', image: './Fnak photos/Vents/vents-2.jpg', cx: 200, cy: 60, w: 85, h: 30 },
+  { id: 'VENT_3', name: 'Vent Junction', sub: 'Main Hub', image: './Fnak photos/Vents/vents-3.jpg', cx: 200, cy: 150, w: 90, h: 30 },
+  { id: 'VENT_4', name: 'Vent Shaft B', sub: 'Lower Bend', image: './Fnak photos/Vents/vents-4.jpg', cx: 320, cy: 150, w: 85, h: 30 },
+  { id: 'VENT_5', name: 'Office Vent', sub: 'Desk Grate', image: './Fnak photos/Vents/vents-5.jpg', cx: 320, cy: 240, w: 90, h: 30 },
+];
+
+export const ALL_ENEMIES = [
+  { id: 'ab', name: 'Abhishek', photo: './Fnak photos/Enemies/AB-random.jpg', jumpscare: './Fnak photos/Enemies/AB-jumpscare.jpg', desc: 'Breaks into office even if door is closed. Freezes when watched. Scare away with Scare Audio [A].' },
+  { id: 'aadesh', name: 'Aadesh', photo: './Fnak photos/Enemies/aadesh-frontfacing.jpg', jumpscare: './Fnak photos/Enemies/aadesh-jumpscare.jpg', desc: 'Sneaks to blind spot. Must close door and turn on light [L] to repel.' },
+  { id: 'dipu', name: 'Dipu', photo: './Fnak photos/Enemies/dipu-frontfacing.jpg', jumpscare: './Fnak photos/Enemies/dipu-jumpscare.png', desc: 'Sprints from his room if left unwatched. Close door [D] to block his sprint.' },
+  { id: 'johann', name: 'Johann', photo: './Fnak photos/Enemies/johann-2.png', jumpscare: './Fnak photos/Enemies/johann-jumpscare.jpg', desc: 'Lurks outside door window. Wear security mask [M] to fool him.' },
+  { id: 'ritul', name: 'Ritul', photo: './Fnak photos/Enemies/ritul.png', jumpscare: './Fnak photos/Enemies/ritul2.png', desc: 'Crawls through vents. Switch to Vent Cams to monitor and seal the vent.' },
+  { id: 'mahadev', name: 'Mahadev', photo: './Fnak photos/Enemies/mahadev.png', jumpscare: './Fnak photos/Enemies/mahadev3.png', desc: 'Music box counter. Wind his counter on the camera monitor before it runs out.' },
+  { id: 'sijin', name: 'Sjinil', photo: './Fnak photos/Enemies/sijin.png', jumpscare: './Fnak photos/Enemies/sijin-2.png', desc: 'Hacker. Re-establish Internet in Maintenance before he hacks the computer (10-30s timer).' },
+  { id: 'ryan', name: 'Ryan', photo: './Fnak photos/Enemies/ryan.png', jumpscare: './Fnak photos/Enemies/ryan.png', desc: 'Infiltrates computer files. Delete .exe files before 3:00 AM or face fatal corruption.' },
+];
+
+export const UPLOAD_TASKS = [
+  { id: 'ligin', name: 'Ligin', label: 'OMR Evaluation', image: './Fnak photos/upload-confirmation.png', desc: 'Classic OMR answer sheet evaluation.' },
+  { id: 'sreekala', name: 'Sreekala', label: 'Assignment Batch', image: './Fnak photos/upload-sreekala.png', desc: 'Upload student assignments batch.' },
+  { id: 'vijitha', name: 'Vijitha', label: 'PCM Fast Upload', image: './Fnak photos/upload-vijitha.png', desc: 'Faster upload, requires answering a Class 11 PCM question.' },
+  { id: 'danny', name: 'Danny', label: 'Vibrant Protocol', image: './Fnak photos/upload-danny.png', desc: 'Energetic protocol: "GOOD EVENING SIR" and "VIBRANT".' },
+];
+
+export const DEFAULT_CONFIG = {
+  selectedRooms: ['ROOM_A', 'CORRIDOR_A', 'CORRIDOR_B', 'CORRIDOR_C', 'STAIRS', 'BALCONY'],
+  selectedEnemies: ['ab', 'aadesh', 'dipu', 'johann'],
+  enemyLevels: {
+    ab: 10,
+    aadesh: 10,
+    dipu: 10,
+    johann: 10,
+    ritul: 10,
+    mahadev: 10,
+    sijin: 10,
+    ryan: 10
+  },
+  uploadTask: 'ligin',
+  hourSeconds: 400 / 6,
+  doorWaitTime: 2.5
 };
 
-export const NIGHT_PRESETS = {
-  1: { hourSeconds: 400 / 6, abLevel: 3, dipuLevel: 1, aadeshLevel: 2, johannLevel: 2, doorWaitTime: 5.0, label: 'Night 1 - The Orientation' },
-  2: { hourSeconds: 400 / 6, abLevel: 6, dipuLevel: 4, aadeshLevel: 5, johannLevel: 5, doorWaitTime: 4.0, label: 'Night 2 - Disturbances' },
-  3: { hourSeconds: 400 / 6, abLevel: 10, dipuLevel: 8, aadeshLevel: 9, johannLevel: 8, doorWaitTime: 3.0, label: 'Night 3 - Escalation' },
-  4: { hourSeconds: 400 / 6, abLevel: 14, dipuLevel: 12, aadeshLevel: 13, johannLevel: 12, doorWaitTime: 2.0, label: 'Night 4 - Lockdown' },
-  5: { hourSeconds: 400 / 6, abLevel: 18, dipuLevel: 17, aadeshLevel: 18, johannLevel: 16, doorWaitTime: 1.0, label: 'Night 5 - Final Shift' },
-};
+export const INITIAL_RYAN_FILES = [
+  { name: 'aahil.jpg', type: 'image', size: '302 KB', transferred: false, src: './Fnak photos/Files-Ryan/aahil.jpg' },
+  { name: 'abhishek.jpg', type: 'image', size: '93 KB', transferred: false, src: './Fnak photos/Files-Ryan/abhishek.jpg' },
+  { name: 'aswin.jpg', type: 'image', size: '82 KB', transferred: false, src: './Fnak photos/Files-Ryan/aswin.jpg' },
+  { name: 'Eshan.jpg', type: 'image', size: '450 KB', transferred: false, src: './Fnak photos/Files-Ryan/Eshan.jpg' },
+  { name: 'free-gta6.exe', type: 'exe', size: '38 KB', transferred: false, deleted: false, src: './Fnak photos/Files-Ryan/free-gta6.webp' },
+  { name: 'joewyn-confront.png', type: 'image', size: '970 KB', transferred: false, src: './Fnak photos/Files-Ryan/joewyn-confront.png' },
+  { name: 'question-paper.exe', type: 'exe', size: '28 KB', transferred: false, deleted: false, src: './Fnak photos/Files-Ryan/qn-paper.jpg' },
+  { name: 'ryan.jpg', type: 'image', size: '714 KB', transferred: false, src: './Fnak photos/Files-Ryan/ryan.jpg' },
+  { name: 'sijinil.jpg', type: 'image', size: '315 KB', transferred: false, src: './Fnak photos/Files-Ryan/sijinil.jpg' },
+];
 
-// Standalone helper function for usage bars calculation
 export function getUsageBars(state) {
   if (!state || state.isBlackout) return 0;
-  let bars = 1; // base usage
+  let bars = 1;
   if (state.isDoorClosed) bars += 2;
   if (state.isLightOn) bars += 1;
   if (state.isMonitorOpen) bars += 1;
@@ -82,126 +88,265 @@ export function getUsageBars(state) {
 }
 
 export class GameState {
-  constructor(night = 1, customConfig = null) {
-    const config = customConfig || NIGHT_PRESETS[night] || NIGHT_PRESETS[1];
-    this.night = night;
-    this.customConfig = customConfig;
-    this.isGeneratorAvailable = typeof this.night === 'number' ? (this.night >= 3) : false; // Only available from Night 3 onwards
-    this.isGeneratorUsed = false;
-    this.isGeneratorPrimed = false;
-    this.generatorBonus = 0;
-    this.hourSeconds = config.hourSeconds || (400 / 6);
-    this.abLevel = config.abLevel ?? 4;
-    this.dipuLevel = config.dipuLevel ?? 3;
-    this.aadeshLevel = config.aadeshLevel ?? 4;
-    this.johannLevel = config.johannLevel ?? Math.min(18, Math.max(1, (this.night - 1) * 3 + 2));
-    // Reaction time window at door: 5s on Night 1, 4s on Night 2, down to 1s on Night 5
-    this.doorWaitTime = config.doorWaitTime ?? Math.max(1.0, 6.0 - this.night);
+  constructor(customConfig = null) {
+    const config = { ...DEFAULT_CONFIG, ...(customConfig || {}) };
+    this.customConfig = config;
 
-    this.time = 0; // 0 = 12 AM, 1 = 1 AM, ... 6 = 6 AM
-    this.timeProgress = 0; // 0 to 1 within current hour
+    // Room Selection
+    this.selectedRooms = Array.isArray(config.selectedRooms) && config.selectedRooms.length >= 6
+      ? config.selectedRooms
+      : DEFAULT_CONFIG.selectedRooms;
+
+    // Active Camera objects
+    this.activeCameras = ALL_ROOMS.filter(r => this.selectedRooms.includes(r.id));
+    if (this.activeCameras.length === 0) {
+      this.activeCameras = ALL_ROOMS.slice(0, 6);
+      this.selectedRooms = this.activeCameras.map(c => c.id);
+    }
+
+    // Enemy Selection
+    this.selectedEnemies = Array.isArray(config.selectedEnemies) && config.selectedEnemies.length >= 3
+      ? config.selectedEnemies
+      : DEFAULT_CONFIG.selectedEnemies;
+
+    // AI Levels
+    const levels = config.enemyLevels || {};
+    this.abLevel = levels.ab ?? 10;
+    this.aadeshLevel = levels.aadesh ?? 10;
+    this.dipuLevel = levels.dipu ?? 10;
+    this.johannLevel = levels.johann ?? 10;
+    this.ritulLevel = levels.ritul ?? 10;
+    this.mahadevLevel = levels.mahadev ?? 10;
+    this.sijinLevel = levels.sijin ?? 10;
+    this.ryanLevel = levels.ryan ?? 10;
+
+    // Upload Task
+    this.uploadTask = config.uploadTask || 'ligin';
+
+    // Shift & Time Progression
+    this.hourSeconds = config.hourSeconds || (400 / 6);
+    this.doorWaitTime = config.doorWaitTime || 2.5;
+    this.time = 0; // 0 = 12 AM .. 6 = 6 AM
+    this.timeProgress = 0;
     this.power = 100.0;
     this.isBlackout = false;
     this.isDoorClosed = false;
     this.isLightOn = false;
     this.isMonitorOpen = false;
     this.isMaskOn = false;
-    this.scareCooldown = 0; // 10 second countdown for scare audio
-    this.currentCam = 'CAM_1';
+    this.scareCooldown = 0;
     this.isGameOver = false;
     this.isGameWon = false;
-    this.jumpscareWho = null; // 'ab', 'dipu', 'aadesh', 'johann'
+    this.jumpscareWho = null;
 
-    // Animatronic states
+    // Current camera view
+    this.currentCam = this.activeCameras[0]?.id || 'ROOM_A';
+    this.isVentCamMode = false;
+    this.currentVentCam = 'VENT_1';
+
+    // Generator
+    this.isGeneratorAvailable = true;
+    this.isGeneratorUsed = false;
+    this.isGeneratorPrimed = false;
+    this.generatorBonus = 0;
+
+    // FNAF 3 Maintenance System
+    // Subsystems: Internet, Cameras, Sounds, Vents
+    this.maintenance = {
+      internet: 'OK', // 'OK' | 'ERROR' | 'REBOOTING'
+      cameras: 'OK',
+      sounds: 'OK',
+      vents: 'OK',
+      rebootingSystem: null,
+      rebootTimer: 0,
+      nextGlitchTimer: 25 + Math.random() * 30
+    };
+
+    // Ritul (Vents)
+    this.ritul = {
+      enabled: this.selectedEnemies.includes('ritul'),
+      pos: 'VENT_1', // VENT_1 -> VENT_2 -> VENT_3 -> VENT_4 -> VENT_5 -> OFFICE
+      timer: 0,
+      sealedVent: null,
+      officeTimer: 0
+    };
+
+    // Mahadev (Music Box / Counter)
+    this.mahadev = {
+      enabled: this.selectedEnemies.includes('mahadev'),
+      counter: 100, // 0 to 100%
+      isWinding: false,
+      drainRate: 1.5 + (this.mahadevLevel * 0.15) // % per second
+    };
+
+    // Sjinil (Hacker)
+    // Hacks computer if internet goes out for more than 10-30s depending on AI level
+    const maxHackWait = Math.max(10, 30 - this.sijinLevel * 0.9);
+    this.sijin = {
+      enabled: this.selectedEnemies.includes('sijin'),
+      maxWait: maxHackWait,
+      offlineTimer: 0,
+      isHacking: false,
+      hasHacked: false
+    };
+
+    // Ryan (Files)
+    this.ryan = {
+      enabled: this.selectedEnemies.includes('ryan'),
+      files: INITIAL_RYAN_FILES.map(f => ({ ...f })),
+      penetrated: false,
+      cooked: false
+    };
+
+    // Animatronics - Classic 4
+    const firstRoom = this.activeCameras[0]?.id || 'ROOM_A';
+    const midRoom = this.activeCameras[Math.floor(this.activeCameras.length / 2)]?.id || 'CORRIDOR_A';
+    const stairRoom = this.activeCameras.find(c => c.id === 'STAIRS')?.id || midRoom;
+    const supplyRoom = this.activeCameras.find(c => c.id === 'CORRIDOR_B')?.id || firstRoom;
+    const balconyRoom = this.activeCameras.find(c => c.id === 'BALCONY')?.id || firstRoom;
+
     this.ab = {
-      location: 'CAM_1', // CAM_1 -> CAM_2 -> CAM_4/6 -> CAM_5 -> DOOR
+      enabled: this.selectedEnemies.includes('ab'),
+      location: firstRoom,
       atDoorTimer: 0,
       hasBangedDoor: false,
     };
 
     this.dipu = {
-      stage: 0, // 0 = In CAM_3, 1 = Peeking CAM_3, 2 = Sprinting down hallway
+      enabled: this.selectedEnemies.includes('dipu'),
+      room: supplyRoom,
+      stage: 0,
       sprintTimer: 0,
       stallTimer: 0,
     };
 
     this.aadesh = {
-      location: 'CAM_4', // CAM_4 -> CAM_2/CAM_6 -> CAM_5 -> BLIND_SPOT
+      enabled: this.selectedEnemies.includes('aadesh'),
+      location: stairRoom,
       atBlindSpotTimer: 0,
       wasDoorClosedWhilePresent: false,
     };
 
     this.johann = {
-      location: 'IDLE', // IDLE -> DOOR
+      enabled: this.selectedEnemies.includes('johann'),
+      location: balconyRoom,
       timer: 0,
       hasBanged: false,
       maskTimer: 0,
     };
 
-    // Desk Monitor & OMR Subsystem
-    this.omrUploadCount = 0; // Total uploads completed this shift
-    this.omrUploadsInCycle = 0; // Uploads count towards current hour skip
-    // Quota: Night 1 & 2: 2 uploads, Night 3: 3 uploads, Night 4 & 5: 4 uploads
-    this.omrQuota = (this.night === 1 || this.night === 2) ? 2 : (this.night === 3 ? 3 : 4);
-    // Cooldown: 15 seconds before next upload is possible
-    this.omrMaxCooldown = 15;
-    this.omrCooldown = 0; // Starts ready (0s)
+    // Desk Monitor & Uploads
+    this.omrUploadCount = 0;
+    this.omrUploadsInCycle = 0;
+    this.omrQuota = 2;
+    this.omrMaxCooldown = 12;
+    this.omrCooldown = 0;
     this.isOmrUploading = false;
-    this.applyHourlyAI();
   }
 
+  getUsageBars() {
+    return getUsageBars(this);
+  }
 
-  // FNAF-inspired hourly AI level scheduler
-  applyHourlyAI(onEvent = null) {
-    if (this.customConfig) {
-      if (this.time >= 2) {
-        const bonus = Math.min(3, Math.floor(this.time / 2));
-        this.abLevel = Math.min(20, (this.customConfig.abLevel ?? 10) + bonus);
-        this.dipuLevel = Math.min(20, (this.customConfig.dipuLevel ?? 10) + bonus);
-        this.aadeshLevel = Math.min(20, (this.customConfig.aadeshLevel ?? 10) + bonus);
-        this.johannLevel = Math.min(20, (this.customConfig.johannLevel ?? 10) + bonus);
+  // Toggle Vent Cam Mode
+  toggleVentCamMode() {
+    this.isVentCamMode = !this.isVentCamMode;
+    return this.isVentCamMode;
+  }
+
+  // Seal / Unseal a vent against Ritul
+  toggleSealVent(ventId) {
+    if (this.ritul.sealedVent === ventId) {
+      this.ritul.sealedVent = null;
+    } else {
+      this.ritul.sealedVent = ventId;
+      // If Ritul was in this vent, push him back
+      if (this.ritul.pos === ventId) {
+        this.ritul.pos = 'VENT_1';
+        this.ritul.timer = 0;
       }
-      return;
     }
-
-    const schedule = HOURLY_AI_SCHEDULE[this.night];
-    if (!schedule) return;
-
-    const currentHourIndex = Math.min(5, Math.max(0, this.time));
-    const entry = schedule[currentHourIndex];
-    if (entry) {
-      this.aadeshLevel = entry.aadesh;
-      this.dipuLevel = entry.dipu;
-      this.abLevel = entry.ab;
-      this.johannLevel = entry.johann;
-    }
+    return this.ritul.sealedVent;
   }
 
-  // Auxiliary Power Generator: Usable only from Night 3 onwards!
-  // If power reaches 0%, extra power activates immediately;
-  // If power > 0%, arms/primes the generator so it will automatically trigger when power reaches 0%!
+  // Wind Mahadev's Music Box Counter
+  startWindingMahadev() {
+    this.mahadev.isWinding = true;
+  }
+
+  stopWindingMahadev() {
+    this.mahadev.isWinding = false;
+  }
+
+  // Maintenance reboot action
+  rebootMaintenanceSystem(systemName, onEvent = null) {
+    if (this.maintenance.rebootingSystem) return false;
+    if (this.maintenance[systemName] !== 'ERROR') return false;
+
+    this.maintenance.rebootingSystem = systemName;
+    this.maintenance[systemName] = 'REBOOTING';
+    this.maintenance.rebootTimer = 4.0; // 4 seconds to reboot
+    if (onEvent) onEvent({ type: 'MAINTENANCE_REBOOT_START', system: systemName });
+    return true;
+  }
+
+  rebootAllMaintenanceSystems(onEvent = null) {
+    if (this.maintenance.rebootingSystem) return false;
+    const errors = ['internet', 'cameras', 'sounds', 'vents'].filter(s => this.maintenance[s] === 'ERROR');
+    if (errors.length === 0) return false;
+
+    this.maintenance.rebootingSystem = 'ALL';
+    errors.forEach(s => { this.maintenance[s] = 'REBOOTING'; });
+    this.maintenance.rebootTimer = 6.0;
+    if (onEvent) onEvent({ type: 'MAINTENANCE_REBOOT_ALL_START' });
+    return true;
+  }
+
+  // File Transfer in Ryan's system
+  transferFile(fileName, onEvent = null) {
+    const file = this.ryan.files.find(f => f.name === fileName);
+    if (!file) return false;
+    file.transferred = true;
+    if (onEvent) onEvent({ type: 'FILE_TRANSFERRED', fileName });
+    return true;
+  }
+
+  // Delete suspicious .exe in Ryan's system
+  deleteFile(fileName, onEvent = null) {
+    const file = this.ryan.files.find(f => f.name === fileName);
+    if (!file) return false;
+    file.deleted = true;
+    if (onEvent) onEvent({ type: 'FILE_DELETED', fileName });
+    return true;
+  }
+
+  // Click on .exe file (triggers Ryan penetration glitch!)
+  runFile(fileName, onEvent = null) {
+    const file = this.ryan.files.find(f => f.name === fileName);
+    if (!file) return false;
+    if (file.type === 'exe' && !file.deleted) {
+      this.ryan.penetrated = true;
+      if (onEvent) onEvent({ type: 'RYAN_PENETRATED' });
+      return true;
+    }
+    return false;
+  }
+
+  // Auxiliary Power Generator
   solveGeneratorWirePuzzle(onEvent = null) {
     if (!this.isGeneratorAvailable || this.isGeneratorUsed) return { activated: false, primed: false };
-    const powerBonus = Math.floor(Math.random() * 6) + 10; // 10% to 15%
+    const powerBonus = Math.floor(Math.random() * 6) + 10;
     this.generatorBonus = powerBonus;
 
-    // If already at 0% power or in blackout: activate immediately!
     if (this.power <= 0 || this.isBlackout) {
       return this.activateGenerator(onEvent);
     }
 
-    // Otherwise prime for when power reaches 0%
     this.isGeneratorPrimed = true;
-    if (onEvent) {
-      onEvent({
-        type: 'GENERATOR_PRIMED',
-        powerBonus,
-      });
-    }
+    if (onEvent) onEvent({ type: 'GENERATOR_PRIMED', powerBonus });
     return { activated: false, primed: true, powerBonus };
   }
 
-  // Activate extra power (triggered when power reaches 0%)
   activateGenerator(onEvent = null) {
     if (!this.isGeneratorAvailable || this.isGeneratorUsed) return { activated: false, powerRestored: 0 };
     const powerRestored = this.generatorBonus || (Math.floor(Math.random() * 6) + 10);
@@ -212,77 +357,53 @@ export class GameState {
       this.isBlackout = false;
       this.blackoutTimer = 0;
     }
-    if (onEvent) {
-      onEvent({
-        type: 'GENERATOR_ACTIVATED',
-        powerRestored,
-        newPower: this.power,
-      });
-    }
+    if (onEvent) onEvent({ type: 'GENERATOR_ACTIVATED', powerRestored, newPower: this.power });
     return { activated: true, powerRestored, newPower: this.power };
   }
-  getUsageBars() {
-    return getUsageBars(this);
-  }
 
-  // Handle door toggle from player
   toggleDoor(onEvent) {
     if (this.isBlackout) return false;
     const willClose = !this.isDoorClosed;
     this.isDoorClosed = willClose;
 
     if (willClose) {
-      // DIPU defense check: if sprinting, blocked by door!
-      if (this.dipu.stage === 2) {
-        // Dipu is blocked when he reaches the door
-      }
-
-      // AADESH defense check: Aadesh only goes away if you turn on lights AFTER closing door
-      if (this.aadesh.location === 'BLIND_SPOT') {
+      if (this.aadesh.enabled && this.aadesh.location === 'BLIND_SPOT') {
         this.aadesh.wasDoorClosedWhilePresent = true;
-        // If light is already active when door closes, Aadesh is repelled immediately!
         if (this.isLightOn) {
           this.defendAadesh(onEvent);
           return true;
         }
       }
-
-      // NOTE: Abhishek breaks in even if door is closed! Door does not repel Abhishek.
       return false;
     } else {
-      // Door opened
-      if (this.aadesh.location === 'BLIND_SPOT') {
+      if (this.aadesh.enabled && this.aadesh.location === 'BLIND_SPOT') {
         this.aadesh.wasDoorClosedWhilePresent = false;
       }
     }
     return false;
   }
 
-  // Handle light toggle from player
   toggleLight(onEvent) {
     if (this.isBlackout) return false;
     this.isLightOn = !this.isLightOn;
 
-    // Aadesh mechanic: Aadesh only goes away if you turn on lights after closing door!
-    if (this.isLightOn && this.isDoorClosed && this.aadesh.location === 'BLIND_SPOT') {
+    if (this.aadesh.enabled && this.isLightOn && this.isDoorClosed && this.aadesh.location === 'BLIND_SPOT') {
       this.defendAadesh(onEvent);
       return true;
     }
     return false;
   }
 
-  // Defend against Aadesh
   defendAadesh(onEvent) {
-    this.aadesh.location = 'CAM_4';
+    const resetRoom = this.activeCameras.find(c => c.id === 'STAIRS')?.id || this.activeCameras[0]?.id || 'STAIRS';
+    this.aadesh.location = resetRoom;
     this.aadesh.atBlindSpotTimer = 0;
     this.aadesh.wasDoorClosedWhilePresent = false;
     if (onEvent) onEvent({ type: 'DOOR_DEFENSE', animatronic: 'aadesh' });
   }
 
-  // Handle mask toggle from player
   toggleMask(onEvent) {
     if (this.isBlackout || this.isOmrUploading) return false;
-    // Putting on mask closes surveillance monitor
     if (!this.isMaskOn && this.isMonitorOpen) {
       this.isMonitorOpen = false;
     }
@@ -290,88 +411,55 @@ export class GameState {
 
     if (onEvent) onEvent({ type: 'MASK_TOGGLE', isMaskOn: this.isMaskOn });
 
-    // Check if Johann is present at the door when mask is put on
-    if (this.isMaskOn && this.johann.location === 'DOOR') {
-      // Mask worn fools Johann
-      this.johann.maskTimer = 0.5; // Start mask recognition quickly
+    if (this.johann.enabled && this.isMaskOn && this.johann.location === 'DOOR') {
+      this.johann.maskTimer = 0.5;
     }
 
     return this.isMaskOn;
   }
 
-  // Abhishek Scare Audio Mechanic
-  // Player plays scare audio in a camera room or front of office to scare him away
-  // 10 second countdown cooldown
   playScareAudio(targetCam = null, onEvent = null) {
     if (this.scareCooldown > 0) {
       return { success: false, reason: 'COOLDOWN', remaining: this.scareCooldown };
     }
+    if (this.maintenance.sounds === 'ERROR') {
+      return { success: false, reason: 'MAINTENANCE_ERROR' };
+    }
 
-    this.scareCooldown = 10.0; // 10s countdown
-
-    // Target room defaults to current camera or CAM_5 (Corridor C right in front of door)
-    const room = targetCam || this.currentCam || 'CAM_5';
+    this.scareCooldown = 10.0;
+    const room = targetCam || this.currentCam || 'CORRIDOR_C';
     let abAffected = false;
     let newLocation = null;
 
-    const isAbAtDoor = (this.ab.location === 'DOOR');
-    const isAbInRoom = (this.ab.location === room);
+    if (this.ab.enabled) {
+      const isAbAtDoor = (this.ab.location === 'DOOR');
+      const isAbInRoom = (this.ab.location === room);
 
-    // If audio is played in front of office door (CAM_5) and AB is at DOOR:
-    if (isAbAtDoor && (room === 'CAM_5' || room === 'DOOR')) {
-      abAffected = true;
-      this.ab.atDoorTimer = 0;
-      this.ab.hasBangedDoor = false;
-      // Guaranteed moves away from player!
-      const awayRooms = ['CAM_2', 'CAM_4', 'CAM_6'];
-      newLocation = awayRooms[Math.floor(Math.random() * awayRooms.length)];
-      this.ab.location = newLocation;
-    } else if (isAbInRoom) {
-      abAffected = true;
-      this.ab.atDoorTimer = 0;
-      this.ab.hasBangedDoor = false;
-
-      // If audio is played in a room right in front of the office door (CAM_5), he should move away!
-      if (room === 'CAM_5') {
-        const awayRooms = ['CAM_2', 'CAM_4', 'CAM_6'];
-        newLocation = awayRooms[Math.floor(Math.random() * awayRooms.length)];
-      } else {
-        // 2/3 times he moves away from player, 1/3 times towards player
-        const roll = Math.random();
-        if (roll < (2 / 3)) {
-          // Moves away from player
-          if (room === 'CAM_2') newLocation = 'CAM_1';
-          else if (room === 'CAM_4' || room === 'CAM_6') newLocation = 'CAM_2';
-          else if (room === 'CAM_1') newLocation = 'CAM_1';
-          else newLocation = 'CAM_1';
-        } else {
-          // 1/3 times moves towards player
-          if (room === 'CAM_1') newLocation = 'CAM_2';
-          else if (room === 'CAM_2' || room === 'CAM_4' || room === 'CAM_6') newLocation = 'CAM_5';
-          else newLocation = 'DOOR';
-        }
+      if (isAbAtDoor && (room === 'CORRIDOR_C' || room === 'DOOR')) {
+        abAffected = true;
+        this.ab.atDoorTimer = 0;
+        this.ab.hasBangedDoor = false;
+        const awayChoices = this.activeCameras.filter(c => c.id !== 'CORRIDOR_C');
+        newLocation = awayChoices[Math.floor(Math.random() * awayChoices.length)]?.id || this.activeCameras[0]?.id;
+        this.ab.location = newLocation;
+      } else if (isAbInRoom) {
+        abAffected = true;
+        this.ab.atDoorTimer = 0;
+        this.ab.hasBangedDoor = false;
+        const awayChoices = this.activeCameras.filter(c => c.id !== room);
+        newLocation = awayChoices[Math.floor(Math.random() * awayChoices.length)]?.id || this.activeCameras[0]?.id;
+        this.ab.location = newLocation;
       }
-      this.ab.location = newLocation;
     }
 
     if (onEvent) {
-      onEvent({
-        type: 'SCARE_AUDIO_PLAYED',
-        room,
-        abAffected,
-        newLocation,
-      });
-      if (abAffected) {
-        onEvent({ type: 'AB_SCARED', to: newLocation });
-      }
+      onEvent({ type: 'SCARE_AUDIO_PLAYED', room, abAffected, newLocation });
+      if (abAffected) onEvent({ type: 'AB_SCARED', to: newLocation });
     }
 
     return { success: true, abAffected, newLocation, room };
   }
 
-  // Skip one in-game hour (triggered when OMR quota is met)
-  // Preserves minute progress within the hour so that uploading at 1:44 AM skips to 2:44 AM
-  // instead of resetting back to 2:00 AM!
   skipHour(onEvent) {
     if (this.isGameOver || this.isGameWon) return;
     this.time += 1;
@@ -379,18 +467,15 @@ export class GameState {
       this.time = 6;
       this.timeProgress = 0;
       this.isGameWon = true;
-      this.applyHourlyAI(onEvent);
       if (onEvent) {
         onEvent({ type: 'HOUR_CHANGE', hour: this.time });
         onEvent({ type: 'GAME_WIN' });
       }
       return;
     }
-    this.applyHourlyAI(onEvent);
     if (onEvent) onEvent({ type: 'HOUR_CHANGE', hour: this.time });
   }
 
-  // Handle completed OMR upload
   completeOmrUpload(onEvent) {
     if (this.isGameOver || this.isGameWon) return { hourSkipped: false, newHour: this.time };
 
@@ -419,28 +504,40 @@ export class GameState {
     return { hourSkipped, newHour: this.time };
   }
 
-  // Advance game logic by deltaSeconds
   tick(dt, onEvent) {
     if (this.isGameOver || this.isGameWon) return;
 
-    // --- SCARE AUDIO COOLDOWN DECAY (10-second countdown) ---
+    // Scare cooldown
     if (this.scareCooldown > 0) {
       this.scareCooldown = Math.max(0, this.scareCooldown - dt);
     }
 
-    // --- OMR COOLDOWN DECAY ---
+    // OMR cooldown
     if (this.omrCooldown > 0) {
       this.omrCooldown = Math.max(0, this.omrCooldown - dt);
     }
 
-    // --- TIME PROGRESSION ---
+    // Time Progression
     if (!this.isBlackout) {
       this.timeProgress += dt / this.hourSeconds;
       if (this.timeProgress >= 1) {
         this.timeProgress = 0;
         this.time += 1;
-        this.applyHourlyAI(onEvent);
         onEvent({ type: 'HOUR_CHANGE', hour: this.time });
+
+        // Ryan 3:00 AM check
+        if (this.time === 3 && this.ryan.enabled && !this.ryan.cooked) {
+          const undeletedExes = this.ryan.files.filter(f => f.type === 'exe' && !f.deleted);
+          if (undeletedExes.length > 0) {
+            this.ryan.cooked = true;
+            onEvent({ type: 'RYAN_COOKED_COMPUTER' });
+            setTimeout(() => {
+              this.triggerJumpscare('ryan', onEvent);
+            }, 3000);
+            return;
+          }
+        }
+
         if (this.time >= 6) {
           this.time = 6;
           this.timeProgress = 0;
@@ -451,22 +548,20 @@ export class GameState {
       }
     }
 
-    // --- POWER DRAIN ---
+    // Power Drain
     if (!this.isBlackout) {
       if (!this.isOmrUploading) {
         const usage = this.getUsageBars();
-        const nightDrainMultiplier = 1 + (Math.max(1, this.night) - 1) * 0.015;
-        const baseDrainRate = (100 / 500) * nightDrainMultiplier; // 0.2000% / sec on Night 1
-        const drainPerSec = baseDrainRate * (1 + (usage - 1) * 0.65);
+        let drainPerSec = 0.20 * (1 + (usage - 1) * 0.65);
+        if (this.maintenance.vents === 'ERROR') drainPerSec *= 1.35; // ventilation error drains more power
+
         this.power = Math.max(0, this.power - drainPerSec * dt);
 
         if (this.power <= 0) {
-          // If generator is available and primed, automatically activate extra power when power reaches 0!
           if (this.isGeneratorAvailable && this.isGeneratorPrimed && !this.isGeneratorUsed) {
             this.activateGenerator(onEvent);
             return;
           }
-
           this.isBlackout = true;
           this.isDoorClosed = false;
           this.isLightOn = false;
@@ -478,66 +573,182 @@ export class GameState {
       }
     }
 
-    // --- BLACKOUT MECHANIC ---
+    // Blackout
     if (this.isBlackout) {
       this.blackoutTimer = (this.blackoutTimer || 0) + dt;
-      // After 8-15 seconds in blackout, AB jumpscares!
-      if (this.blackoutTimer > 10 + Math.random() * 5) {
+      if (this.blackoutTimer > 9 + Math.random() * 5) {
         this.triggerJumpscare('ab', onEvent);
       }
       return;
     }
 
-    // --- ANIMATRONIC AI TICKS ---
-    this.updateAB(dt, onEvent);
-    this.updateJohann(dt, onEvent);
-    this.updateAadesh(dt, onEvent);
-    this.updateDipu(dt, onEvent);
+    // Maintenance System Glitches & Reboot progress
+    this.updateMaintenance(dt, onEvent);
+
+    // Mahadev (Music Box Counter)
+    if (this.mahadev.enabled) {
+      this.updateMahadev(dt, onEvent);
+    }
+
+    // Sjinil (Hacker)
+    if (this.sijin.enabled) {
+      this.updateSijin(dt, onEvent);
+    }
+
+    // Ritul (Vents)
+    if (this.ritul.enabled) {
+      this.updateRitul(dt, onEvent);
+    }
+
+    // Classic 4
+    if (this.ab.enabled) this.updateAB(dt, onEvent);
+    if (this.johann.enabled) this.updateJohann(dt, onEvent);
+    if (this.aadesh.enabled) this.updateAadesh(dt, onEvent);
+    if (this.dipu.enabled) this.updateDipu(dt, onEvent);
   }
 
-  // --- AB (Abhishek) AI ---
-  // Abhishek breaks in and kills player even if door is closed!
-  // Player must scare him away with scare audio
+  // --- Maintenance Loop ---
+  updateMaintenance(dt, onEvent) {
+    // Process reboot
+    if (this.maintenance.rebootingSystem) {
+      this.maintenance.rebootTimer -= dt;
+      if (this.maintenance.rebootTimer <= 0) {
+        if (this.maintenance.rebootingSystem === 'ALL') {
+          ['internet', 'cameras', 'sounds', 'vents'].forEach(s => { this.maintenance[s] = 'OK'; });
+        } else {
+          this.maintenance[this.maintenance.rebootingSystem] = 'OK';
+        }
+        const sys = this.maintenance.rebootingSystem;
+        this.maintenance.rebootingSystem = null;
+        if (onEvent) onEvent({ type: 'MAINTENANCE_REBOOT_COMPLETE', system: sys });
+      }
+    }
+
+    // Random failure tick
+    this.maintenance.nextGlitchTimer -= dt;
+    if (this.maintenance.nextGlitchTimer <= 0) {
+      this.maintenance.nextGlitchTimer = 35 + Math.random() * 45;
+      const systems = ['internet', 'cameras', 'sounds', 'vents'].filter(s => this.maintenance[s] === 'OK');
+      if (systems.length > 0) {
+        const failSys = systems[Math.floor(Math.random() * systems.length)];
+        this.maintenance[failSys] = 'ERROR';
+        if (onEvent) onEvent({ type: 'MAINTENANCE_SYSTEM_ERROR', system: failSys });
+      }
+    }
+  }
+
+  // --- Mahadev (Music Box) ---
+  updateMahadev(dt, onEvent) {
+    if (this.mahadev.isWinding) {
+      this.mahadev.counter = Math.min(100, this.mahadev.counter + 24 * dt);
+    } else {
+      this.mahadev.counter = Math.max(0, this.mahadev.counter - this.mahadev.drainRate * dt);
+      if (this.mahadev.counter <= 0) {
+        this.triggerJumpscare('mahadev', onEvent);
+      }
+    }
+  }
+
+  // --- Sjinil (Hacker) ---
+  updateSijin(dt, onEvent) {
+    if (this.maintenance.internet === 'ERROR') {
+      this.sijin.offlineTimer += dt;
+      if (this.sijin.offlineTimer >= this.sijin.maxWait && !this.sijin.hasHacked) {
+        this.sijin.hasHacked = true;
+        this.sijin.isHacking = true;
+        if (onEvent) onEvent({ type: 'SJINIL_HACKED_COMPUTER' });
+        setTimeout(() => {
+          this.triggerJumpscare('sijin', onEvent);
+        }, 3200);
+      }
+    } else {
+      this.sijin.offlineTimer = Math.max(0, this.sijin.offlineTimer - dt * 1.5);
+    }
+  }
+
+  // --- Ritul (Vents) ---
+  updateRitul(dt, onEvent) {
+    const ventSequence = ['VENT_1', 'VENT_2', 'VENT_3', 'VENT_4', 'VENT_5', 'OFFICE'];
+    const currentIdx = ventSequence.indexOf(this.ritul.pos);
+
+    if (this.ritul.pos === 'OFFICE') {
+      this.ritul.officeTimer += dt;
+      if (this.ritul.officeTimer >= 2.5) {
+        this.triggerJumpscare('ritul', onEvent);
+      }
+      return;
+    }
+
+    this.ritul.timer += dt;
+    const stepDuration = Math.max(4.0, 16.0 - this.ritulLevel * 0.6);
+
+    if (this.ritul.timer >= stepDuration) {
+      this.ritul.timer = 0;
+      const roll = Math.floor(Math.random() * 20) + 1;
+      if (roll <= this.ritulLevel) {
+        const nextVent = ventSequence[currentIdx + 1];
+
+        // Check if next vent is sealed
+        if (this.ritul.sealedVent === nextVent) {
+          // Blocked by vent seal! Push back to VENT_1
+          this.ritul.pos = 'VENT_1';
+          if (onEvent) onEvent({ type: 'RITUL_BLOCKED_BY_VENT_SEAL' });
+        } else {
+          this.ritul.pos = nextVent;
+          if (nextVent === 'OFFICE') {
+            this.ritul.officeTimer = 0;
+            if (onEvent) onEvent({ type: 'RITUL_AT_OFFICE_VENT' });
+          } else {
+            if (onEvent) onEvent({ type: 'RITUL_VENT_MOVE', vent: nextVent });
+          }
+        }
+      }
+    }
+  }
+
+  // --- Abhishek (AB) ---
   updateAB(dt, onEvent) {
-    // FNAF 1 Freddy Mechanic: Abhishek freezes while player watches his camera room!
-    if (this.isMonitorOpen && this.currentCam === this.ab.location && this.ab.location !== 'DOOR') {
+    if (this.isMonitorOpen && !this.isVentCamMode && this.currentCam === this.ab.location && this.ab.location !== 'DOOR') {
       this.abMoveTimer = 0;
       return;
     }
+
     if (this.ab.location === 'DOOR') {
       this.ab.atDoorTimer += dt;
-
-      // If door is closed, Abhishek bangs forcefully after ~1.2s to alert player
       if (this.isDoorClosed && !this.ab.hasBangedDoor && this.ab.atDoorTimer >= 1.2) {
         this.ab.hasBangedDoor = true;
         onEvent({ type: 'AB_BREAKING_IN' });
       }
-
-      // Kills player even if door is closed!
       if (this.ab.atDoorTimer >= this.doorWaitTime) {
         this.triggerJumpscare('ab', onEvent);
       }
       return;
     }
 
-    // Movement opportunity check every ~3.8s
     this.abMoveTimer = (this.abMoveTimer || 0) + dt;
     if (this.abMoveTimer >= 3.8) {
       this.abMoveTimer = 0;
       const roll = Math.floor(Math.random() * 20) + 1;
       if (roll <= this.abLevel) {
-        // Pathing: CAM_1 -> CAM_2 -> (CAM_4, CAM_6, or CAM_5) -> CAM_5 -> DOOR
-        if (this.ab.location === 'CAM_1') {
-          this.ab.location = 'CAM_2';
-          onEvent({ type: 'MOVEMENT', animatronic: 'ab', to: 'CAM_2' });
-        } else if (this.ab.location === 'CAM_2') {
-          const choices = ['CAM_4', 'CAM_5', 'CAM_6'];
-          this.ab.location = choices[Math.floor(Math.random() * choices.length)];
+        // Find next step in selected rooms leading towards office
+        const candidateRooms = this.activeCameras.map(c => c.id).filter(id => id !== this.ab.location);
+        const rollStep = Math.random();
+
+        if (rollStep < 0.45 && candidateRooms.length > 0) {
+          this.ab.location = candidateRooms[Math.floor(Math.random() * candidateRooms.length)];
           onEvent({ type: 'MOVEMENT', animatronic: 'ab', to: this.ab.location });
-        } else if (this.ab.location === 'CAM_4' || this.ab.location === 'CAM_6') {
-          this.ab.location = 'CAM_5';
-          onEvent({ type: 'MOVEMENT', animatronic: 'ab', to: 'CAM_5' });
-        } else if (this.ab.location === 'CAM_5') {
+        } else if (rollStep < 0.8) {
+          const nearOffice = this.activeCameras.find(c => c.id === 'CORRIDOR_C')?.id || candidateRooms[0] || 'DOOR';
+          if (this.ab.location === nearOffice) {
+            this.ab.location = 'DOOR';
+            this.ab.atDoorTimer = 0;
+            this.ab.hasBangedDoor = false;
+            onEvent({ type: 'ENEMY_AT_DOOR', animatronic: 'ab' });
+          } else {
+            this.ab.location = nearOffice;
+            onEvent({ type: 'MOVEMENT', animatronic: 'ab', to: this.ab.location });
+          }
+        } else {
           this.ab.location = 'DOOR';
           this.ab.atDoorTimer = 0;
           this.ab.hasBangedDoor = false;
@@ -547,26 +758,20 @@ export class GameState {
     }
   }
 
-  // --- JOHANN AI ---
-  // Roams CAM_6 (Balcony) -> CAM_4/2 -> CAM_5 (Corridor C) -> DOOR.
-  // Can be seen through closed door window.
-  // After 2 seconds, bangs the door. After 5 seconds, kills you.
-  // Goes away if player wears mask.
+  // --- Johann ---
   updateJohann(dt, onEvent) {
-    // FNAF Mechanic: Watching Balcony (CAM_6) stalls Johann from departing!
-    if (this.isMonitorOpen && this.currentCam === 'CAM_6' && this.johann.location === 'CAM_6') {
+    if (this.isMonitorOpen && !this.isVentCamMode && this.currentCam === this.johann.location && this.johann.location !== 'DOOR') {
       this.johannMoveTimer = 0;
       return;
     }
+
     if (this.johann.location === 'DOOR') {
       this.johann.timer += dt;
-
-      // Check mask defense
       if (this.isMaskOn) {
         this.johann.maskTimer += dt;
-        // After wearing mask for ~0.8s while Johann is there, he retreats!
         if (this.johann.maskTimer >= 0.8) {
-          this.johann.location = Math.random() < 0.5 ? 'CAM_6' : 'CAM_4';
+          const resetRoom = this.activeCameras.find(c => c.id === 'BALCONY')?.id || this.activeCameras[0]?.id;
+          this.johann.location = resetRoom;
           this.johann.timer = 0;
           this.johann.hasBanged = false;
           this.johann.maskTimer = 0;
@@ -577,90 +782,64 @@ export class GameState {
         this.johann.maskTimer = 0;
       }
 
-      // After 2 seconds, he bangs the door!
       if (this.johann.timer >= 2.0 && !this.johann.hasBanged) {
         this.johann.hasBanged = true;
         if (onEvent) onEvent({ type: 'JOHANN_BANG' });
       }
 
-      // After 5 seconds, he kills you!
       if (this.johann.timer >= 5.0) {
         this.triggerJumpscare('johann', onEvent);
       }
       return;
     }
 
-    // Camera roaming movement check every ~4.0s
     this.johannMoveTimer = (this.johannMoveTimer || 0) + dt;
     if (this.johannMoveTimer >= 4.0) {
       this.johannMoveTimer = 0;
       const roll = Math.floor(Math.random() * 20) + 1;
       if (roll <= this.johannLevel) {
-        if (this.johann.location === 'CAM_6') {
-          this.johann.location = Math.random() < 0.5 ? 'CAM_2' : 'CAM_4';
+        const candidateRooms = this.activeCameras.map(c => c.id).filter(id => id !== this.johann.location);
+        if (Math.random() < 0.6 && candidateRooms.length > 0) {
+          this.johann.location = candidateRooms[Math.floor(Math.random() * candidateRooms.length)];
           onEvent({ type: 'MOVEMENT', animatronic: 'johann', to: this.johann.location });
-        } else if (this.johann.location === 'CAM_4') {
-          this.johann.location = 'CAM_5';
-          onEvent({ type: 'MOVEMENT', animatronic: 'johann', to: 'CAM_5' });
-        } else if (this.johann.location === 'CAM_2') {
-          this.johann.location = 'CAM_5';
-          onEvent({ type: 'MOVEMENT', animatronic: 'johann', to: 'CAM_5' });
-        } else if (this.johann.location === 'CAM_5') {
+        } else {
           this.johann.location = 'DOOR';
           this.johann.timer = 0;
           this.johann.hasBanged = false;
           this.johann.maskTimer = 0;
           onEvent({ type: 'ENEMY_AT_DOOR', animatronic: 'johann' });
           onEvent({ type: 'JOHANN_AT_DOOR' });
-        } else {
-          this.johann.location = 'CAM_6';
         }
       }
     }
   }
 
-  // --- AADESH AI ---
-  // Only goes away if player turns on lights after closing door!
+  // --- Aadesh ---
   updateAadesh(dt, onEvent) {
     if (this.aadesh.location === 'BLIND_SPOT') {
-      // If door is closed AND light is on -> repelled!
       if (this.isDoorClosed && this.isLightOn) {
         this.defendAadesh(onEvent);
         return;
       }
-
       if (!this.isDoorClosed) {
-        // Door is open: countdown to kill
         this.aadesh.atBlindSpotTimer += dt;
         if (this.aadesh.atBlindSpotTimer >= this.doorWaitTime) {
           this.triggerJumpscare('aadesh', onEvent);
         }
-      } else {
-        // Door is closed, but lights are OFF:
-        // Aadesh stays waiting outside, does not leave until light is turned on!
       }
       return;
     }
 
-    // Movement opportunity check
     this.aadeshMoveTimer = (this.aadeshMoveTimer || 0) + dt;
     if (this.aadeshMoveTimer >= 3.6) {
       this.aadeshMoveTimer = 0;
       const roll = Math.floor(Math.random() * 20) + 1;
       if (roll <= this.aadeshLevel) {
-        if (this.aadesh.location === 'CAM_4') {
-          this.aadesh.location = Math.random() < 0.5 ? 'CAM_2' : 'CAM_6';
+        const candidateRooms = this.activeCameras.map(c => c.id).filter(id => id !== this.aadesh.location);
+        if (Math.random() < 0.65 && candidateRooms.length > 0) {
+          this.aadesh.location = candidateRooms[Math.floor(Math.random() * candidateRooms.length)];
           onEvent({ type: 'MOVEMENT', animatronic: 'aadesh', to: this.aadesh.location });
-        } else if (this.aadesh.location === 'CAM_6') {
-          this.aadesh.location = 'CAM_5';
-          onEvent({ type: 'MOVEMENT', animatronic: 'aadesh', to: 'CAM_5' });
-        } else if (this.aadesh.location === 'CAM_1') {
-          this.aadesh.location = 'CAM_2';
-          onEvent({ type: 'MOVEMENT', animatronic: 'aadesh', to: 'CAM_2' });
-        } else if (this.aadesh.location === 'CAM_2') {
-          this.aadesh.location = Math.random() < 0.6 ? 'CAM_5' : 'CAM_1';
-          onEvent({ type: 'MOVEMENT', animatronic: 'aadesh', to: this.aadesh.location });
-        } else if (this.aadesh.location === 'CAM_5') {
+        } else {
           this.aadesh.location = 'BLIND_SPOT';
           this.aadesh.atBlindSpotTimer = 0;
           this.aadesh.wasDoorClosedWhilePresent = this.isDoorClosed;
@@ -670,45 +849,36 @@ export class GameState {
     }
   }
 
-  // --- DIPU AI ---
+  // --- Dipu ---
   updateDipu(dt, onEvent) {
-    // If player is actively watching CAM_3, Dipu is stalled
-    const isWatchingDipu = this.isMonitorOpen && this.currentCam === 'CAM_3';
+    const isWatchingDipu = this.isMonitorOpen && !this.isVentCamMode && this.currentCam === this.dipu.room;
 
     if (this.dipu.stage === 0 || this.dipu.stage === 1) {
       if (isWatchingDipu) {
         this.dipu.stallTimer = 0;
         return;
       }
-
       this.dipu.stallTimer += dt;
-      // If unwatched for long enough, advance stage
-      const advanceThreshold = Math.max(6, 18 - this.dipuLevel);
+      const advanceThreshold = Math.max(5, 17 - this.dipuLevel * 0.7);
       if (this.dipu.stallTimer >= advanceThreshold) {
         this.dipu.stallTimer = 0;
         this.dipu.stage += 1;
         onEvent({ type: 'DIPU_STAGE', stage: this.dipu.stage });
-
         if (this.dipu.stage === 2) {
-          // Dipu begins sprint!
           this.dipu.sprintTimer = 0;
           onEvent({ type: 'DIPU_SPRINT' });
         }
       }
     } else if (this.dipu.stage === 2) {
-      // Sprinting down hallway! Reaches office in ~2.6 seconds.
       this.dipu.sprintTimer += dt;
       if (this.dipu.sprintTimer >= 2.6) {
         if (this.isDoorClosed) {
-          // Blocked by closed door! Bangs heavily on door and retreats to CAM_3
           onEvent({ type: 'DOOR_DEFENSE', animatronic: 'dipu' });
           this.dipu.stage = 0;
           this.dipu.sprintTimer = 0;
           this.dipu.stallTimer = 0;
-          // Drain 4% power from the heavy impact!
           this.power = Math.max(0, this.power - 4);
         } else {
-          // Door is open: IMMEDIATELY ends game!
           this.triggerJumpscare('dipu', onEvent);
         }
       }
@@ -721,6 +891,6 @@ export class GameState {
     this.jumpscareWho = who;
     this.isMonitorOpen = false;
     this.isMaskOn = false;
-    onEvent({ type: 'JUMPSCARE', animatronic: who });
+    if (onEvent) onEvent({ type: 'JUMPSCARE', animatronic: who });
   }
 }

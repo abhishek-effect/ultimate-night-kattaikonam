@@ -5,16 +5,13 @@ export default function JumpscareOverlay({ jumpscareWho, onJumpscareEnd }) {
   const [showStaticCut, setShowStaticCut] = useState(false);
 
   useEffect(() => {
-    // Play jumpscare scream
     soundManager.playJumpscare();
 
-    // After 1.6s, cut to fuzz static
     const staticTimer = setTimeout(() => {
       setShowStaticCut(true);
       soundManager.playStaticBurst(0.8, 0.4);
     }, 1600);
 
-    // After 2.4s, trigger Game Over screen
     const endTimer = setTimeout(() => {
       onJumpscareEnd();
     }, 2400);
@@ -25,27 +22,48 @@ export default function JumpscareOverlay({ jumpscareWho, onJumpscareEnd }) {
     };
   }, [onJumpscareEnd]);
 
-  // Determine jumpscare asset
-  let imageSrc = './assets/images/ab-jumpscare.jpg';
+  let imageSrc = './Fnak photos/Enemies/AB-jumpscare.jpg';
   let title = 'AB ATTACKED';
 
-  if (jumpscareWho === 'dipu') {
-    imageSrc = './assets/images/dipu-jumpscare.png';
-    title = 'DIPU ATTACKED';
-  } else if (jumpscareWho === 'aadesh') {
-    imageSrc = './assets/images/aadesh-jumpscare.jpg';
-    title = 'AADESH ATTACKED';
-  } else if (jumpscareWho === 'johann') {
-    imageSrc = './assets/images/johann-jumpscare.jpg';
-    title = 'JOHANN ATTACKED';
+  switch (jumpscareWho) {
+    case 'dipu':
+      imageSrc = './Fnak photos/Enemies/dipu-jumpscare.png';
+      title = 'DIPU ATTACKED';
+      break;
+    case 'aadesh':
+      imageSrc = './Fnak photos/Enemies/aadesh-jumpscare.jpg';
+      title = 'AADESH ATTACKED';
+      break;
+    case 'johann':
+      imageSrc = './Fnak photos/Enemies/johann-jumpscare.jpg';
+      title = 'JOHANN ATTACKED';
+      break;
+    case 'ritul':
+      imageSrc = './Fnak photos/Enemies/ritul2.png';
+      title = 'RITUL ATTACKED';
+      break;
+    case 'mahadev':
+      imageSrc = './Fnak photos/Enemies/mahadev3.png';
+      title = 'MAHADEV ATTACKED';
+      break;
+    case 'sijin':
+      imageSrc = './Fnak photos/Enemies/sijin-2.png';
+      title = 'SJINIL HACKED & ATTACKED';
+      break;
+    case 'ryan':
+      imageSrc = './Fnak photos/Enemies/ryan.png';
+      title = 'RYAN PENETRATED & ATTACKED';
+      break;
+    default:
+      imageSrc = './Fnak photos/Enemies/AB-jumpscare.jpg';
+      title = 'ANIMATRONIC ATTACKED';
+      break;
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden select-none">
-      {/* Violent Jumpscare Sudden Lunging Jump-Up Animation */}
+    <div className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden select-none font-mono">
       {!showStaticCut ? (
         <div className="relative w-full h-full flex items-center justify-center bg-black overflow-hidden">
-          {/* Sudden Jump-Up Character Container */}
           <div className="relative w-full h-full flex items-center justify-center jumpscare-anim pointer-events-none">
             <img
               src={imageSrc}
@@ -55,21 +73,18 @@ export default function JumpscareOverlay({ jumpscareWho, onJumpscareEnd }) {
               className="max-h-[90vh] md:max-h-[95vh] w-auto max-w-[95vw] object-contain face-clear rounded-2xl"
             />
           </div>
-
-          {/* Sudden red pulse flare on impact */}
-          <div className="absolute inset-0 bg-red-600/20 mix-blend-screen pointer-events-none animate-ping" />
+          <div className="absolute inset-0 bg-red-600/25 mix-blend-screen pointer-events-none animate-ping" />
           <div className="crt-overlay" />
           <div className="crt-vignette" />
         </div>
       ) : (
-        /* Post-Jumpscare TV Static Cut */
         <div className="relative w-full h-full bg-neutral-900 static-fuzz flex items-center justify-center">
-          <div className="text-center font-mono space-y-2">
+          <div className="text-center space-y-2">
             <h2 className="text-red-600 text-3xl font-black tracking-widest glitch-text">
               SIGNAL LOST
             </h2>
             <p className="text-gray-400 text-sm tracking-widest uppercase">
-              SECURITY SYSTEM DISCONNECTED
+              SECURITY SYSTEM DISCONNECTED // {title}
             </p>
           </div>
           <div className="crt-overlay" />

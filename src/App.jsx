@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { GameState, NIGHT_PRESETS } from './game/gameEngine';
+import { GameState } from './game/gameEngine';
 import { soundManager } from './audio/SoundManager';
 import MainMenu from './components/MainMenu';
 import OfficeView from './components/OfficeView';
@@ -13,131 +13,72 @@ import PauseMenu from './components/PauseMenu';
 import TutorialGameplay from './components/TutorialGameplay';
 import { preloadAllAssets } from './utils/assetLoader';
 import { requestAppFullscreen } from './utils/fullscreen';
-import {
-  getUnlockedNight,
-  getSelectedNight,
-  setSelectedNight,
-  unlockNextNight,
-  resetGameProgress
-} from './utils/storage';
+import { getShowMinutes, setShowMinutes } from './utils/storage';
 
 // Early kickoff of asset preloading
 preloadAllAssets().catch(() => {});
 
 export default function App() {
   const [screen, setScreen] = useState('STUDIO_INTRO'); // STUDIO_INTRO, MENU, TUTORIAL, INTRO, PLAYING, JUMPSCARE, GAME_OVER, WIN
-  const [unlockedNight, setUnlockedNight] = useState(() => getUnlockedNight());
-  const [currentNight, setCurrentNight] = useState(() => getSelectedNight());
   const [gameState, setGameState] = useState(null);
   const [jumpscareTarget, setJumpscareTarget] = useState(null);
   const [isDoorBanging, setIsDoorBanging] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [cameraGlitch, setCameraGlitch] = useState(false);
   const [scareSubtitle, setScareSubtitle] = useState(null);
-  const [devToastMessage, setDevToastMessage] = useState(null);
-  const [showMinutes, setShowMinutes] = useState(() => localStorage.getItem('fnak_show_minutes') === 'true');
+  const [ryanPenetratedMessage, setRyanPenetratedMessage] = useState(null);
+  const [sjinilHackedMessage, setSjinilHackedMessage] = useState(null);
+  const [showMinutes, setShowMinutesState] = useState(() => getShowMinutes());
 
   const handleToggleClockFormat = useCallback(() => {
-    setShowMinutes(prev => {
+    setShowMinutesState(prev => {
       const next = !prev;
-      localStorage.setItem('fnak_show_minutes', String(next));
+      setShowMinutes(next);
       return next;
     });
   }, []);
 
-
   const customConfigRef = useRef(null);
   const lastMovementPlayedFootstepsRef = useRef(false);
 
-  // Developer Mode (window.isDeveloper = true) Console Listener
-  useEffect(() => {
-    const handleDevMode = (e) => {
-      if (e.detail?.isDeveloper) {
-        setUnlockedNight(6);
-        setDevToastMessage(e.detail.message || 'Hello Pinky/Dip-u. Hope you are not someone else');
-        setTimeout(() => setDevToastMessage(null), 6000);
-      }
-    };
-    window.addEventListener('dev-mode-change', handleDevMode);
-    if (window.isDeveloper) {
-      setUnlockedNight(6);
-    }
-    return () => window.removeEventListener('dev-mode-change', handleDevMode);
+  // Stable clone of GameState to trigger React re-renders
+  const refreshGameState = useCallback((state) => {
+    if (!state) return null;
+    return Object.assign(Object.create(Object.getPrototypeOf(state)), state);
   }, []);
 
-
-  // Keep references updated for stable callbacks
-  const currentNightRef = useRef(currentNight);
-  useEffect(() => {
-    currentNightRef.current = currentNight;
-  }, [currentNight]);
-
-  const gameStateRef = useRef(gameState);
-  useEffect(() => {
-    gameStateRef.current = gameState;
-  }, [gameState]);
-
-  // Handle explicit night selection from player
-  const handleSelectNight = (night) => {
-    if (night > unlockedNight) return;
-    setCurrentNight(night);
-    setSelectedNight(night);
-  };
-
-  // Reset progress back to Night 1
-  const handleResetProgress = () => {
-    resetGameProgress();
-    setUnlockedNight(1);
-    setCurrentNight(1);
-  };
-
-  // Start a new night shift
-  const handleStartGame = (night = currentNight, customConfig = null) => {
+  // Start game shift with custom configuration
+  const handleStartGame = (customConfig) => {
     requestAppFullscreen();
     soundManager.stopMenuBgm();
     soundManager.stopFootstepClip();
     lastMovementPlayedFootstepsRef.current = false;
     setIsPaused(false);
     customConfigRef.current = customConfig;
-    setCurrentNight(night);
-    if (!customConfig && night <= 5) {
-      setSelectedNight(night);
-    }
-    const newGame = new GameState(night, customConfig);
+    setRyanPenetratedMessage(null);
+    setSjinilHackedMessage(null);
+
+    const newGame = new GameState(customConfig);
     setGameState(newGame);
     setScreen('INTRO');
   };
 
-  // Intro finished -> start shift
   const handleIntroFinish = () => {
     setScreen('PLAYING');
     soundManager.startFan();
   };
 
-  // Game Over from Jumpscare
   const handleJumpscareEnd = () => {
     setIsPaused(false);
     setScreen('GAME_OVER');
   };
 
-  // Retry same night
   const handleRetry = () => {
     requestAppFullscreen();
     setIsPaused(false);
-    handleStartGame(currentNight, customConfigRef.current);
+    handleStartGame(customConfigRef.current);
   };
 
-  // Proceed to next night
-  const handleNextNight = () => {
-    requestAppFullscreen();
-    setIsPaused(false);
-    const next = Math.min(5, currentNight + 1);
-    setCurrentNight(next);
-    setSelectedNight(next);
-    handleStartGame(next);
-  };
-
-  // Main Menu Return
   const handleMainMenu = () => {
     soundManager.stopFootstepClip();
     lastMovementPlayedFootstepsRef.current = false;
@@ -146,11 +87,12 @@ export default function App() {
     soundManager.stopSprintRunning();
     soundManager.stopBlackoutMusic();
     setIsPaused(false);
+    setRyanPenetratedMessage(null);
+    setSjinilHackedMessage(null);
     setScreen('MENU');
     soundManager.playMenuBgm();
   };
 
-  // Toggle Pause Menu
   const handleTogglePause = useCallback(() => {
     if (screen !== 'PLAYING' || !gameState || gameState.isBlackout || gameState.isGameOver) return;
     setIsPaused(prev => {
@@ -171,13 +113,7 @@ export default function App() {
     soundManager.resumeGameAudio();
   }, []);
 
-  // Safe prototype-preserving clone
-  const refreshGameState = useCallback((state) => {
-    if (!state) return null;
-    return Object.assign(Object.create(Object.getPrototypeOf(state)), state);
-  }, []);
-
-  // Game Engine Event Dispatcher
+  // Event dispatcher
   const handleGameEvent = useCallback((event) => {
     switch (event.type) {
       case 'HOUR_CHANGE':
@@ -186,13 +122,10 @@ export default function App() {
 
       case 'MOVEMENT':
         if (event.animatronic && ['aadesh', 'johann', 'ab'].includes(event.animatronic)) {
-          // Fast display flash on enemy movement (no slow fade)
           setCameraGlitch(true);
           soundManager.playStaticBurst(0.12, 0.18);
           setTimeout(() => setCameraGlitch(false), 180);
 
-          // Alternating 50% footsteps logic:
-          // If it played for one movement, skip for next movement (alternate)
           if (lastMovementPlayedFootstepsRef.current) {
             lastMovementPlayedFootstepsRef.current = false;
           } else {
@@ -209,9 +142,28 @@ export default function App() {
       case 'JOHANN_APPEARED':
       case 'JOHANN_RETREAT':
       case 'AB_SCARED':
-        // Fast display flash (180ms)
         setCameraGlitch(true);
         setTimeout(() => setCameraGlitch(false), 180);
+        break;
+
+      case 'RYAN_PENETRATED':
+        setCameraGlitch(true);
+        soundManager.playStaticBurst(0.3, 0.5);
+        setRyanPenetratedMessage('RYAN PENETRATED YOUR COMPUTER');
+        setTimeout(() => setCameraGlitch(false), 300);
+        setTimeout(() => setRyanPenetratedMessage(null), 8000);
+        break;
+
+      case 'RYAN_COOKED_COMPUTER':
+        setCameraGlitch(true);
+        soundManager.playStaticBurst(0.5, 0.8);
+        setRyanPenetratedMessage('Sijinil and Ryan cooked your computer.');
+        break;
+
+      case 'SJINIL_HACKED_COMPUTER':
+        setCameraGlitch(true);
+        soundManager.playStaticBurst(0.4, 0.7);
+        setSjinilHackedMessage('SJINIL HACKED YOUR SYSTEM! ACCESS DENIED');
         break;
 
       case 'GENERATOR_PRIMED':
@@ -278,19 +230,6 @@ export default function App() {
         soundManager.stopHeartbeat();
         soundManager.stopSprintRunning();
         soundManager.stopBlackoutMusic();
-
-        {
-          const wonNight = gameStateRef.current?.night ?? currentNightRef.current;
-          const nextUnlocked = unlockNextNight(wonNight);
-          setUnlockedNight(nextUnlocked);
-
-          if (wonNight < 5) {
-            const nextNight = wonNight + 1;
-            setCurrentNight(nextNight);
-            setSelectedNight(nextNight);
-          }
-        }
-
         setScreen('WIN');
         break;
 
@@ -320,7 +259,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [screen, gameState, isPaused, handleGameEvent]);
 
-  // Player action handlers
+  // Action Handlers
   const handleToggleDoor = useCallback(() => {
     if (!gameState || gameState.isBlackout || isPaused) return;
     const willClose = !gameState.isDoorClosed;
@@ -331,7 +270,6 @@ export default function App() {
     } else {
       gameState.isDoorClosed = false;
     }
-
     setGameState(refreshGameState(gameState));
   }, [gameState, refreshGameState, handleGameEvent, isPaused]);
 
@@ -371,7 +309,7 @@ export default function App() {
     return res;
   }, [gameState, refreshGameState, handleGameEvent, isPaused]);
 
-  const handleActivateGenerator = useCallback((powerAmount) => {
+  const handleActivateGenerator = useCallback(() => {
     if (!gameState) return;
     gameState.solveGeneratorWirePuzzle(handleGameEvent);
     setGameState(refreshGameState(gameState));
@@ -379,11 +317,40 @@ export default function App() {
 
   const handleSelectCam = useCallback((camId) => {
     if (!gameState || isPaused) return;
-    gameState.currentCam = camId;
+    if (gameState.isVentCamMode) {
+      gameState.currentVentCam = camId;
+    } else {
+      gameState.currentCam = camId;
+    }
     setGameState(refreshGameState(gameState));
   }, [gameState, refreshGameState, isPaused]);
 
-  // Complete OMR upload callback
+  const handleToggleVentMode = useCallback(() => {
+    if (!gameState || isPaused) return;
+    gameState.toggleVentCamMode();
+    soundManager.playStaticBurst(0.1, 0.15);
+    setGameState(refreshGameState(gameState));
+  }, [gameState, refreshGameState, isPaused]);
+
+  const handleSealVent = useCallback((ventId) => {
+    if (!gameState || isPaused) return;
+    gameState.toggleSealVent(ventId);
+    soundManager.playDoorKnock();
+    setGameState(refreshGameState(gameState));
+  }, [gameState, refreshGameState, isPaused]);
+
+  const handleStartWindingMahadev = useCallback(() => {
+    if (!gameState || isPaused) return;
+    gameState.startWindingMahadev();
+    setGameState(refreshGameState(gameState));
+  }, [gameState, refreshGameState, isPaused]);
+
+  const handleStopWindingMahadev = useCallback(() => {
+    if (!gameState || isPaused) return;
+    gameState.stopWindingMahadev();
+    setGameState(refreshGameState(gameState));
+  }, [gameState, refreshGameState, isPaused]);
+
   const handleOmrComplete = useCallback(() => {
     if (!gameState || gameState.isGameOver) return null;
     const result = gameState.completeOmrUpload(handleGameEvent);
@@ -392,7 +359,7 @@ export default function App() {
     return result;
   }, [gameState, refreshGameState, handleGameEvent]);
 
-  // Keyboard shortcut listener: Space (Monitor), D (Door), L (Light), M (Mask), A (Scare), ESC / P (Pause)
+  // Keyboard shortcut listener
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (screen !== 'PLAYING') return;
@@ -404,10 +371,7 @@ export default function App() {
       }
 
       if (isPaused) return;
-
-      if (gameState && gameState.isOmrUploading) {
-        return;
-      }
+      if (gameState && gameState.isOmrUploading) return;
 
       if (e.code === 'Space') {
         e.preventDefault();
@@ -423,7 +387,7 @@ export default function App() {
         handleToggleMask();
       } else if (e.code === 'KeyA') {
         e.preventDefault();
-        handlePlayScare(gameState.isMonitorOpen ? gameState.currentCam : 'CAM_5');
+        handlePlayScare(gameState.isMonitorOpen ? gameState.currentCam : 'CORRIDOR_C');
       }
     };
 
@@ -432,7 +396,7 @@ export default function App() {
   }, [screen, isPaused, gameState, handleTogglePause, handleToggleMonitor, handleToggleDoor, handleToggleLight, handleToggleMask, handlePlayScare]);
 
   return (
-    <main className="w-screen min-h-[100dvh] h-[100dvh] overflow-hidden bg-black select-none">
+    <main className="w-screen min-h-[100dvh] h-[100dvh] overflow-hidden bg-black select-none font-mono">
       {screen === 'STUDIO_INTRO' && (
         <StudioIntro onFinish={() => {
           setScreen('MENU');
@@ -442,11 +406,7 @@ export default function App() {
 
       {screen === 'MENU' && (
         <MainMenu
-          currentNight={currentNight}
-          unlockedNight={unlockedNight}
           onStartGame={handleStartGame}
-          onSelectNight={handleSelectNight}
-          onResetProgress={handleResetProgress}
           onStartTutorial={() => setScreen('TUTORIAL')}
           showMinutes={showMinutes}
           onToggleClockFormat={handleToggleClockFormat}
@@ -456,15 +416,12 @@ export default function App() {
       {screen === 'TUTORIAL' && (
         <TutorialGameplay
           onFinish={handleMainMenu}
-          onStartNight1={() => handleStartGame(1)}
+          onStartNight1={() => handleStartGame(customConfigRef.current)}
         />
       )}
 
       {screen === 'INTRO' && (
-        <NightIntro
-          night={currentNight}
-          onFinish={handleIntroFinish}
-        />
+        <NightIntro onFinish={handleIntroFinish} />
       )}
 
       {screen === 'PLAYING' && gameState && (
@@ -475,7 +432,7 @@ export default function App() {
             onToggleLight={handleToggleLight}
             onToggleMonitor={handleToggleMonitor}
             onToggleMask={handleToggleMask}
-            onPlayScare={() => handlePlayScare('CAM_5')}
+            onPlayScare={() => handlePlayScare('CORRIDOR_C')}
             onPause={handleTogglePause}
             isDoorBanging={isDoorBanging}
             onOmrComplete={handleOmrComplete}
@@ -484,6 +441,9 @@ export default function App() {
             showMinutes={showMinutes}
             onToggleClockFormat={handleToggleClockFormat}
             isDisplayFlashing={cameraGlitch}
+            ryanPenetratedMessage={ryanPenetratedMessage}
+            sjinilHackedMessage={sjinilHackedMessage}
+            onRefreshState={() => setGameState(refreshGameState(gameState))}
           />
 
           {gameState.isMonitorOpen && (
@@ -495,10 +455,15 @@ export default function App() {
               cameraGlitch={cameraGlitch}
               scareSubtitle={scareSubtitle}
               showMinutes={showMinutes}
+              onToggleVentMode={handleToggleVentMode}
+              onSealVent={handleSealVent}
+              onStartWindingMahadev={handleStartWindingMahadev}
+              onStopWindingMahadev={handleStopWindingMahadev}
+              ryanPenetratedMessage={ryanPenetratedMessage}
+              sjinilHackedMessage={sjinilHackedMessage}
             />
           )}
 
-          {/* Pause Menu Modal Overlay */}
           {isPaused && (
             <PauseMenu
               gameState={gameState}
@@ -519,7 +484,6 @@ export default function App() {
 
       {screen === 'GAME_OVER' && (
         <GameOverScreen
-          night={currentNight}
           jumpscareWho={jumpscareTarget}
           onRetry={handleRetry}
           onMainMenu={handleMainMenu}
@@ -528,33 +492,9 @@ export default function App() {
 
       {screen === 'WIN' && (
         <NightWinScreen
-          night={currentNight}
-          onNextNight={handleNextNight}
+          onPlayAgain={handleRetry}
           onMainMenu={handleMainMenu}
         />
-      )}
-
-      {/* Developer Mode Toast Notification */}
-      {devToastMessage && (
-        <div className="fixed top-4 inset-x-4 sm:inset-x-auto sm:right-6 z-70 pointer-events-auto animate-bounce">
-          <div className="bg-emerald-950/95 border-2 border-emerald-400 text-emerald-200 px-4 py-3 rounded-xl shadow-[0_0_35px_rgba(16,185,129,0.9)] flex items-center gap-3 font-mono text-xs sm:text-sm">
-            <span className="w-3 h-3 rounded-full bg-emerald-400 animate-ping shrink-0" />
-            <div>
-              <div className="font-black text-emerald-300 uppercase tracking-widest text-[10px] sm:text-xs">
-                DEV OVERRIDE // ALL NIGHTS UNLOCKED
-              </div>
-              <div className="font-bold text-white">
-                &ldquo;{devToastMessage}&rdquo;
-              </div>
-            </div>
-            <button
-              onClick={() => setDevToastMessage(null)}
-              className="text-emerald-400 hover:text-white p-1 rounded hover:bg-emerald-900/60 ml-2 cursor-pointer font-bold"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
       )}
     </main>
   );
