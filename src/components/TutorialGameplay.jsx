@@ -76,10 +76,19 @@ export default function TutorialGameplay({ onFinish, onStartNight1 }) {
     isGeneratorPrimed: false,
     solveGeneratorWirePuzzle: () => ({ activated: false, powerBonus: 0 }),
     activateGenerator: () => ({ activated: false, powerRestored: 0 }),
-    ab: { location: enemyLocations.ab, atDoorTimer: 0, hasBangedDoor: false },
-    dipu: { stage: enemyLocations.dipu, sprintTimer: 0, stallTimer: 0 },
-    aadesh: { location: enemyLocations.aadesh, atBlindSpotTimer: 0, wasDoorClosedWhilePresent: false },
+    activeCameras: CAMERAS.slice(0, 6),
+    selectedRooms: CAMERAS.slice(0, 6).map(c => c.id),
+    maintenance: { internet: 'OK', cameras: 'OK', sounds: 'OK', vents: 'OK' },
+    ritul: { enabled: false },
+    mahadev: { enabled: false, counter: 100 },
+    sijin: { enabled: false },
+    ryan: { enabled: false, files: [] },
+    uploadTask: 'ligin',
+    ab: { enabled: true, location: enemyLocations.ab, atDoorTimer: 0, hasBangedDoor: false },
+    dipu: { enabled: true, stage: enemyLocations.dipu, room: 'CAM_3', sprintTimer: 0, stallTimer: 0 },
+    aadesh: { enabled: true, location: enemyLocations.aadesh, atBlindSpotTimer: 0, wasDoorClosedWhilePresent: false },
     johann: {
+      enabled: true,
       location: enemyLocations.johann,
       timer: 0,
       hasBanged: enemyLocations.johannBanged,
@@ -530,7 +539,7 @@ export default function TutorialGameplay({ onFinish, onStartNight1 }) {
                   className="px-3 py-1 bg-red-600 hover:bg-red-500 text-white rounded text-xs font-bold transition flex items-center gap-1.5 shadow-[0_0_20px_rgba(239,68,68,0.8)] cursor-pointer active:scale-95"
                 >
                   <Play size={12} className="fill-white" />
-                  <span>START NIGHT 1</span>
+                  <span>START CUSTOM SHIFT</span>
                 </button>
                 <button
                   onClick={onFinish}
