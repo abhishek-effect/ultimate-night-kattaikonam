@@ -9,7 +9,8 @@ const WIRE_COLORS = [
   { id: 'magenta', name: 'MAGENTA', hex: '#ec4899', glow: 'rgba(236, 72, 153, 0.8)' },
 ];
 
-export default function WirePuzzleModal({ gameState, onComplete, onClose }) {
+export default function WirePuzzleModal({ isOpen, gameState, onComplete, onClose }) {
+  if (!isOpen) return null;
   // Shuffled terminal orders
   const [leftWires, setLeftWires] = useState([]);
   const [rightWires, setRightWires] = useState([]);
@@ -34,6 +35,19 @@ export default function WirePuzzleModal({ gameState, onComplete, onClose }) {
     // 10 to 15% power bonus
     setPowerRestoredAmount(Math.floor(Math.random() * 6) + 10);
   }, []);
+
+  // Keyboard shortcut: ESC to exit rewire
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        if (onClose) onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   // Track cursor / touch for wire drawing
   const updatePointer = (e) => {
@@ -113,15 +127,21 @@ export default function WirePuzzleModal({ gameState, onComplete, onClose }) {
 
   return (
     <div 
-      onClick={(e) => e.stopPropagation()}
-      className="fixed inset-0 z-60 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 select-none animate-fadeIn"
+      onClick={(e) => {
+        e.stopPropagation();
+        if (onClose) onClose();
+      }}
+      className="fixed inset-0 z-60 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 select-none animate-fadeIn cursor-pointer"
     >
       <div 
         ref={containerRef}
-        onClick={handleContainerClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleContainerClick();
+        }}
         onMouseMove={updatePointer}
         onTouchMove={updatePointer}
-        className="relative bg-neutral-900 border-4 border-yellow-600/90 rounded-2xl w-full max-w-lg md:max-w-xl p-4 sm:p-6 shadow-[0_0_60px_rgba(234,179,8,0.4)] flex flex-col justify-between font-mono overflow-hidden text-gray-200"
+        className="relative bg-neutral-900 border-4 border-yellow-600/90 rounded-2xl w-full max-w-lg md:max-w-xl p-4 sm:p-6 shadow-[0_0_60px_rgba(234,179,8,0.4)] flex flex-col justify-between font-mono overflow-hidden text-gray-200 cursor-default"
       >
         {/* Metal Casing Hazard Stripes Header */}
         <div className="absolute top-0 inset-x-0 h-3 bg-[repeating-linear-gradient(45deg,#ca8a04,#ca8a04_10px,#171717_10px,#171717_20px)] border-b border-yellow-500/50" />
@@ -269,7 +289,7 @@ export default function WirePuzzleModal({ gameState, onComplete, onClose }) {
         </div>
 
         {/* Bottom Status / Completion Bar */}
-        <div className="flex items-center justify-between pt-2 border-t border-neutral-700 text-xs">
+        <div className="flex items-center justify-between pt-2 border-t border-neutral-700 text-xs gap-2">
           <div className="flex items-center gap-2">
             <span className="text-gray-400">WIRES CONNECTED:</span>
             <span className="font-bold text-yellow-400">
@@ -277,21 +297,34 @@ export default function WirePuzzleModal({ gameState, onComplete, onClose }) {
             </span>
           </div>
 
-          {isFinished ? (
-            <div className="flex items-center gap-2 text-emerald-400 font-black animate-bounce text-sm">
-              <CheckCircle2 size={16} />
-              <span>
-                {isPowerZero
-                  ? `GENERATOR ACTIVATED (+${powerRestoredAmount}% POWER RESTORED)!`
-                  : `GENERATOR ARMED! (+${powerRestoredAmount}% READY FOR 0% POWER)!`}
-              </span>
-            </div>
-          ) : (
-            <div className="text-[11px] text-gray-400 flex items-center gap-1">
-              <AlertTriangle size={13} className="text-yellow-500" />
-              <span>{isPowerZero ? 'MATCH WIRES TO RESTORE POWER IMMEDIATELY' : 'MATCH WIRES: WILL ACTIVATE WHEN POWER REACHES 0%'}</span>
-            </div>
-          )}
+          <div className="flex items-center gap-3">
+            {isFinished ? (
+              <div className="flex items-center gap-2 text-emerald-400 font-black animate-bounce text-sm">
+                <CheckCircle2 size={16} />
+                <span>
+                  {isPowerZero
+                    ? `GENERATOR ACTIVATED (+${powerRestoredAmount}% POWER RESTORED)!`
+                    : `GENERATOR ARMED! (+${powerRestoredAmount}% READY FOR 0% POWER)!`}
+                </span>
+              </div>
+            ) : (
+              <div className="text-[11px] text-gray-400 flex items-center gap-1">
+                <AlertTriangle size={13} className="text-yellow-500" />
+                <span className="hidden sm:inline">{isPowerZero ? 'MATCH WIRES TO RESTORE POWER IMMEDIATELY' : 'MATCH WIRES: WILL ACTIVATE AT 0%'}</span>
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onClose) onClose();
+              }}
+              className="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-gray-300 hover:text-white text-[11px] font-bold border border-neutral-600 transition cursor-pointer"
+            >
+              CLOSE [ESC]
+            </button>
+          </div>
         </div>
       </div>
     </div>

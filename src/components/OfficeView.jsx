@@ -546,15 +546,21 @@ export default function OfficeView({
       </div>
 
       {/* WIRE PUZZLE MODAL (Auxiliary Generator) */}
-      <WirePuzzleModal
-        isOpen={isWirePuzzleOpen}
-        onClose={() => setIsWirePuzzleOpen(false)}
-        gameState={gameState}
-        onSuccess={() => {
-          setIsWirePuzzleOpen(false);
-          if (onActivateGenerator) onActivateGenerator();
-        }}
-      />
+      {isWirePuzzleOpen && (
+        <WirePuzzleModal
+          isOpen={isWirePuzzleOpen}
+          onClose={() => setIsWirePuzzleOpen(false)}
+          gameState={gameState}
+          onComplete={(bonus) => {
+            setIsWirePuzzleOpen(false);
+            if (onActivateGenerator) onActivateGenerator(bonus);
+          }}
+          onSuccess={() => {
+            setIsWirePuzzleOpen(false);
+            if (onActivateGenerator) onActivateGenerator();
+          }}
+        />
+      )}
 
       {/* DESK TERMINAL MODAL (Upload, Files, Maintain) (Items 11-18) */}
       <DeskTerminalModal
