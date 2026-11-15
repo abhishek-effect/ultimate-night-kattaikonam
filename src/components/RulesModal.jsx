@@ -176,7 +176,7 @@ export default function RulesModal({ onClose }) {
             {/* The Image: how-to-play.png */}
             <div className="relative w-full max-w-[240px] md:max-w-none rounded-xl overflow-hidden border-2 border-neutral-700 bg-neutral-950 shadow-[0_0_30px_rgba(0,0,0,0.9)] flex items-center justify-center p-2">
               <img 
-                src="./assets/images/how-to-play.png" 
+                src="./Fnak photos/Enemies/how-to-play.png" 
                 alt="Subject AB - How to Play Alert" 
                 loading="eager"
                 className="w-full max-h-64 sm:max-h-72 md:max-h-80 object-contain filter contrast-110 drop-shadow-[0_0_15px_rgba(239,68,68,0.4)]"

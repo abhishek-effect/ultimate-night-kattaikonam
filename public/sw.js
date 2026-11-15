@@ -1,5 +1,5 @@
-// FNAK Service Worker for PWA Add-to-Home-Screen Support
-const CACHE_NAME = 'fnak-cache-v1.2';
+// UNAK Service Worker for PWA Add-to-Home-Screen Support
+const CACHE_NAME = 'unak-cache-v1.0';
 
 self.addEventListener('install', () => {
   self.skipWaiting();
@@ -9,7 +9,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+        keys.filter((key) => key.startsWith('unak-') && key !== CACHE_NAME).map((key) => caches.delete(key))
       )
     ).then(() => self.clients.claim())
   );

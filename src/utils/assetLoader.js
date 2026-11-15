@@ -1,51 +1,104 @@
-// Asset Preloader & In-Memory Texture Cache for FNAK
+// Asset Preloader & In-Memory Texture Cache for Ultimate Night @ Kattaikonam
 // Preloads and decodes all images and audio to guarantee 0ms latency and 0 black-screens.
 
 export const ASSET_MANIFEST = {
   images: [
     // Core UI & Menu
     { id: 'main-menu', src: './assets/images/main-menu.jpg', label: 'Main Menu CRT Interface' },
-    { id: 'main-menu-new', src: './assets/images/main-menu-new.png', label: 'Main Menu CRT Alternate' },
-    { id: 'how-to-play', src: './assets/images/how-to-play.png', label: 'Security Protocol Manual' },
+    { id: 'main-menu-new', src: './Fnak photos/main-menu-new.png', label: 'Main Menu CRT Alternate' },
+    { id: 'how-to-play', src: './Fnak photos/Enemies/how-to-play.png', label: 'Security Protocol Manual' },
 
-    // Office Views (Lights On/Off and Door Open/Closed)
-    { id: 'lights-off-door-open', src: './assets/images/lights-off-door-open.jpg', label: 'Security Office (Lights Off, Door Open)' },
-    { id: 'lights-off-door-closed', src: './assets/images/lights-off-door-closed.jpg', label: 'Security Office (Lights Off, Door Closed)' },
-    { id: 'lights-on-door-open', src: './assets/images/lights-on-door-open.jpg', label: 'Security Office (Lights On, Door Open)' },
-    { id: 'lights-on-door-closed', src: './assets/images/lights-on-door-closed.jpg', label: 'Security Office (Lights On, Door Closed)' },
+    // Office Views
+    { id: 'lights-off-door-open', src: './Fnak photos/Rooms/lights-off-door-open.jpg', label: 'Office (Lights Off, Door Open)' },
+    { id: 'lights-off-door-closed', src: './Fnak photos/Rooms/lights-off-door-closed.jpg', label: 'Office (Lights Off, Door Closed)' },
+    { id: 'lights-on-door-open', src: './Fnak photos/Rooms/lights-on-door-open.jpg', label: 'Office (Lights On, Door Open)' },
+    { id: 'lights-on-door-closed', src: './Fnak photos/Rooms/lights-on-door-closed.jpg', label: 'Office (Lights On, Door Closed)' },
+    { id: 'door-open', src: './Fnak photos/Rooms/DoorOpen.jpg', label: 'Door Open Reference' },
+    { id: 'door-closed', src: './Fnak photos/Rooms/DoorClosed.jpg', label: 'Door Closed Reference' },
 
-    // CCTV Feeds
-    { id: 'cam-room-a', src: './assets/images/cam-room-a.jpg', label: 'CAM 1: Physics Laboratory' },
-    { id: 'cam-corridor-a', src: './assets/images/cam-corridor-a.jpg', label: 'CAM 2: Main Hallway Corridor' },
-    { id: 'cam-corridor-b', src: './assets/images/cam-corridor-b.jpg', label: 'CAM 3: Supply Corridor' },
-    { id: 'cam-stairs', src: './assets/images/cam-stairs.jpg', label: 'CAM 4: Central Staircase' },
-    { id: 'cam-corridor-c', src: './assets/images/cam-corridor-c.jpg', label: 'CAM 5: Corridor C' },
-    { id: 'cam-balcony', src: './assets/images/cam-balcony.jpg', label: 'CAM 6: Balcony Facility Feed' },
+    // All Room Cams (Fnak photos/Rooms/)
+    { id: 'cam-room-a', src: './Fnak photos/Rooms/RoomA.jpg', label: 'CAM: Room A (Physics Lab)' },
+    { id: 'cam-corridor-a', src: './Fnak photos/Rooms/CorridorA.jpg', label: 'CAM: Main Corridor A' },
+    { id: 'cam-corridor-b', src: './Fnak photos/Rooms/CorridorB.jpg', label: 'CAM: Supply Corridor B' },
+    { id: 'cam-corridor-c', src: './Fnak photos/Rooms/CorridorC.jpg', label: 'CAM: Corridor C (Front of Office)' },
+    { id: 'cam-corridor-x', src: './Fnak photos/Rooms/CorridorX.jpg', label: 'CAM: Corridor X' },
+    { id: 'cam-stairs', src: './Fnak photos/Stairs.jpg', label: 'CAM: Central Staircase' },
+    { id: 'cam-balcony', src: './Fnak photos/Rooms/balcony.jpg', label: 'CAM: Balcony Facility Feed' },
+    { id: 'cam-alley', src: './Fnak photos/Rooms/alley.jpg', label: 'CAM: Alley' },
+    { id: 'cam-b127', src: './Fnak photos/Rooms/B-127.jpg', label: 'CAM: Classroom B-127' },
+    { id: 'cam-classroom', src: './Fnak photos/Rooms/classroom.jpg', label: 'CAM: Classroom' },
+    { id: 'cam-elevator', src: './Fnak photos/Rooms/elevator.jpg', label: 'CAM: Elevator' },
+    { id: 'cam-entrance-1', src: './Fnak photos/Rooms/Entrance.jpg', label: 'CAM: Entrance (Variant 1)' },
+    { id: 'cam-entrance-2', src: './Fnak photos/Rooms/Entrance-2.jpg', label: 'CAM: Entrance (Variant 2)' },
+    { id: 'cam-geotech', src: './Fnak photos/Rooms/Geotechlab.jpg', label: 'CAM: Geotech Lab' },
+    { id: 'cam-playground', src: './Fnak photos/Rooms/Playground.jpg', label: 'CAM: Playground' },
+    { id: 'cam-staff-room-1', src: './Fnak photos/Rooms/staff-room.jpg', label: 'CAM: Staff Room (Variant 1)' },
+    { id: 'cam-staff-room-2', src: './Fnak photos/Rooms/staff-room2.jpg', label: 'CAM: Staff Room (Variant 2)' },
 
-    // Character Cutouts & Poses
+    // Vent Cams (Fnak photos/Vents/)
+    { id: 'vent-1', src: './Fnak photos/Vents/vents-1.jpg', label: 'VENT 1 Feed' },
+    { id: 'vent-2', src: './Fnak photos/Vents/vents-2.jpg', label: 'VENT 2 Feed' },
+    { id: 'vent-3', src: './Fnak photos/Vents/vents-3.jpg', label: 'VENT 3 Feed' },
+    { id: 'vent-4', src: './Fnak photos/Vents/vents-4.jpg', label: 'VENT 4 Feed' },
+    { id: 'vent-5', src: './Fnak photos/Vents/vents-5.jpg', label: 'VENT 5 Feed' },
+
+    // Animatronics & Poses (Fnak photos/Enemies/)
     { id: 'ab-cutout', src: './assets/images/ab-cutout.png', label: 'Subject AB Silhouette Feed' },
     { id: 'ab-random-cutout', src: './assets/images/ab-random-cutout.png', label: 'Subject AB Corridor Sensor' },
+    { id: 'ab-random', src: './Fnak photos/Enemies/AB-random.jpg', label: 'Subject AB In Room' },
+    { id: 'ab-jumpscare-jpg', src: './Fnak photos/Enemies/AB-jumpscare.jpg', label: 'AB Threat Bio-Metrics' },
+    { id: 'ab-jumpscare-png', src: './Fnak photos/Enemies/AB-jumpscare.png', label: 'AB Threat Graphic' },
+
     { id: 'aadesh-front', src: './assets/images/aadesh-frontfacing-cutout.png', label: 'Subject Aadesh Corridor Feed' },
     { id: 'aadesh-side', src: './assets/images/aadesh-sideways-cutout.png', label: 'Subject Aadesh Stair Sensor' },
     { id: 'aadesh-door', src: './assets/images/aadesh-jumpscare-cutout.png', label: 'Subject Aadesh Blind Spot Feed' },
+    { id: 'aadesh-front-photo', src: './Fnak photos/Enemies/aadesh-frontfacing.jpg', label: 'Aadesh Front Photo' },
+    { id: 'aadesh-side-photo', src: './Fnak photos/Enemies/aadesh-sideways.jpg', label: 'Aadesh Sideways Photo' },
+    { id: 'aadesh-jumpscare', src: './Fnak photos/Enemies/aadesh-jumpscare.jpg', label: 'Aadesh Threat Bio-Metrics' },
+
     { id: 'dipu-front', src: './assets/images/dipu-frontfacing-cutout.png', label: 'Subject Dipu Dormant Feed' },
     { id: 'dipu-random', src: './assets/images/dipu-random-cutout.png', label: 'Subject Dipu Active Alert Feed' },
     { id: 'dipu-sprint', src: './assets/images/dipu-jumpscare-cutout.png', label: 'Subject Dipu High-Speed Sprint' },
+    { id: 'dipu-front-photo', src: './Fnak photos/Enemies/dipu-frontfacing.jpg', label: 'Dipu Front Photo' },
+    { id: 'dipu-random-photo', src: './Fnak photos/Enemies/dipu-random.jpg', label: 'Dipu Random Photo' },
+    { id: 'dipu-jumpscare', src: './Fnak photos/Enemies/dipu-jumpscare.png', label: 'Dipu Threat Bio-Metrics' },
 
-    // Fatal Jumpscares
-    { id: 'ab-jumpscare', src: './assets/images/ab-jumpscare.jpg', label: 'AB Threat Bio-Metrics' },
-    { id: 'aadesh-jumpscare', src: './assets/images/aadesh-jumpscare.jpg', label: 'Aadesh Threat Bio-Metrics' },
-    { id: 'dipu-jumpscare', src: './assets/images/dipu-jumpscare.png', label: 'Dipu Threat Bio-Metrics' },
-    { id: 'johann-jumpscare', src: './assets/images/johann-jumpscare.jpg', label: 'Johann Threat Bio-Metrics' },
-    { id: 'johann-walking', src: './assets/images/johann-2.png', label: 'Johann Corridor Walking Feed' },
-    { id: 'johann-door', src: './assets/images/johann-3.png', label: 'Johann Door Window Feed' },
-    { id: 'johann-photo', src: './assets/images/johann.jpg', label: 'Johann Identity Photo' },
-    { id: 'mask-overlay', src: './assets/images/mask.webp', label: 'Security Mask Helmet Overlay' },
+    { id: 'johann-walking', src: './Fnak photos/Enemies/johann-2.png', label: 'Johann Corridor Walking Feed' },
+    { id: 'johann-door', src: './Fnak photos/Enemies/johann-3.png', label: 'Johann Door Window Feed' },
+    { id: 'johann-jumpscare', src: './Fnak photos/Enemies/johann-jumpscare.jpg', label: 'Johann Threat Bio-Metrics' },
 
-    // Office Desk Monitor & OMR Subsystem
-    { id: 'desk-monitor', src: './assets/images/monitor.webp', label: 'Security Terminal Monitor' },
-    { id: 'upload-confirmation', src: './assets/images/upload-confirmation.png', label: 'OMR Ligin Confirmation Prompt' },
-    { id: 'uploading-omr', src: './assets/images/uploading-omr.jpg', label: 'OMR Data Transmission Feed' },
+    // New Enemies
+    { id: 'ritul-1', src: './Fnak photos/Enemies/ritul.png', label: 'Subject Ritul Vent Crawl 1' },
+    { id: 'ritul-2', src: './Fnak photos/Enemies/ritul2.png', label: 'Subject Ritul Vent Crawl 2' },
+    { id: 'mahadev-1', src: './Fnak photos/Enemies/mahadev.png', label: 'Subject Mahadev Stage 1' },
+    { id: 'mahadev-2', src: './Fnak photos/Enemies/mahadev2.png', label: 'Subject Mahadev Stage 2' },
+    { id: 'mahadev-3', src: './Fnak photos/Enemies/mahadev3.png', label: 'Subject Mahadev Stage 3' },
+    { id: 'sijin-1', src: './Fnak photos/Enemies/sijin.png', label: 'Subject Sjinil Hacker Primary' },
+    { id: 'sijin-2', src: './Fnak photos/Enemies/sijin-2.png', label: 'Subject Sjinil Hacker Glitch' },
+    { id: 'ryan-1', src: './Fnak photos/Enemies/ryan.png', label: 'Subject Ryan System Threat' },
+
+    // Office Desk Monitor, Mask & Wallpaper
+    { id: 'desk-monitor', src: './Fnak photos/monitor.webp', label: 'Security Terminal Monitor' },
+    { id: 'mask-overlay', src: './Fnak photos/mask.webp', label: 'Security Mask Helmet Overlay' },
+    { id: 'pc-wallpaper', src: './Fnak photos/pc-wallpaper.jpg', label: 'Desk Monitor PC Wallpaper' },
+
+    // Upload Confirmation Images
+    { id: 'upload-ligin', src: './Fnak photos/upload-confirmation.png', label: 'Ligin Upload Prompt' },
+    { id: 'upload-sreekala', src: './Fnak photos/upload-sreekala.png', label: 'Sreekala Upload Prompt' },
+    { id: 'upload-vijitha', src: './Fnak photos/upload-vijitha.png', label: 'Vijitha Upload Prompt' },
+    { id: 'upload-danny', src: './Fnak photos/upload-danny.png', label: 'Danny Upload Prompt' },
+    { id: 'uploading-omr', src: './Fnak photos/uploading-omr.jpg', label: 'OMR Data Transmission Feed' },
+
+    // Files Ryan
+    { id: 'file-aahil', src: './Fnak photos/Files-Ryan/aahil.jpg', label: 'Ryan File: Aahil' },
+    { id: 'file-abhishek', src: './Fnak photos/Files-Ryan/abhishek.jpg', label: 'Ryan File: Abhishek' },
+    { id: 'file-aswin', src: './Fnak photos/Files-Ryan/aswin.jpg', label: 'Ryan File: Aswin' },
+    { id: 'file-eshan', src: './Fnak photos/Files-Ryan/Eshan.jpg', label: 'Ryan File: Eshan' },
+    { id: 'file-free-gta6', src: './Fnak photos/Files-Ryan/free-gta6.webp', label: 'Ryan File: Free GTA 6' },
+    { id: 'file-joewyn', src: './Fnak photos/Files-Ryan/joewyn-confront.png', label: 'Ryan File: Joewyn Confront' },
+    { id: 'file-qn-paper', src: './Fnak photos/Files-Ryan/qn-paper.jpg', label: 'Ryan File: Question Paper' },
+    { id: 'file-ryan', src: './Fnak photos/Files-Ryan/ryan.jpg', label: 'Ryan File: Ryan' },
+    { id: 'file-sijinil', src: './Fnak photos/Files-Ryan/sijinil.jpg', label: 'Ryan File: Sijinil' },
   ],
 
   audio: [
@@ -54,7 +107,7 @@ export const ASSET_MANIFEST = {
     { id: 'running-sfx', src: './assets/audio/running-sfx.mp3', label: 'Sprint Footstep Acoustics' },
     { id: 'footsteps', src: './assets/audio/footsteps.mp3', label: 'Corridor Footsteps Acoustics' },
     { id: 'main-menu-bgm', src: './assets/audio/main-menu-bgm.mp3', label: 'Facility Ambience Feed' },
-    { id: 'upload-success', src: './assets/audio/upload-success.mp3', label: 'OMR Upload Success Chime' },
+    { id: 'upload-success', src: './assets/audio/upload-success.mp3', label: 'Upload Success Chime' },
     { id: 'scare-attitude', src: './assets/audio/change-your-attitude-children.mp3', label: 'Scare Audio: Change Your Attitude' },
     { id: 'scare-dpp', src: './assets/audio/submit-your-dpp.mp3', label: 'Scare Audio: Submit DPP' },
     { id: 'scare-photocopy', src: './assets/audio/where-is-your-photocopy.mp3', label: 'Scare Audio: Photocopy' },
@@ -68,12 +121,8 @@ const loadedAudioElements = new Map();
 let isPreloadCompleted = false;
 let preloadPromise = null;
 
-/**
- * Preload and force GPU decoding of an individual image
- */
 function preloadImage(item) {
   return new Promise((resolve) => {
-    // Return cached if already decoded
     if (loadedImageElements.has(item.src)) {
       resolve({ success: true, item });
       return;
@@ -82,7 +131,6 @@ function preloadImage(item) {
     const img = new Image();
     img.src = item.src;
 
-    // Timeout safety: resolve after 6 seconds even if network is slow
     const timeout = setTimeout(() => {
       loadedImageElements.set(item.src, img);
       resolve({ success: false, item, timedOut: true });
@@ -91,13 +139,10 @@ function preloadImage(item) {
     const onComplete = async () => {
       clearTimeout(timeout);
       try {
-        // Modern browser GPU decode: decompresses image into GPU texture buffer
         if (typeof img.decode === 'function') {
           await img.decode();
         }
-      } catch (_) {
-        // Fallback: standard onload is already sufficient
-      }
+      } catch (_) {}
       loadedImageElements.set(item.src, img);
       resolve({ success: true, item });
     };
@@ -108,16 +153,12 @@ function preloadImage(item) {
       img.onload = onComplete;
       img.onerror = () => {
         clearTimeout(timeout);
-        // Resolve anyway to prevent blocking the game
         resolve({ success: false, item, error: true });
       };
     }
   });
 }
 
-/**
- * Preload and buffer an audio file into HTTP / memory cache
- */
 function preloadAudio(item) {
   return new Promise((resolve) => {
     if (loadedAudioElements.has(item.src)) {
@@ -125,7 +166,6 @@ function preloadAudio(item) {
       return;
     }
 
-    // Safety timeout after 5 seconds
     const timeout = setTimeout(() => {
       resolve({ success: false, item, timedOut: true });
     }, 5000);
@@ -135,7 +175,6 @@ function preloadAudio(item) {
       audio.preload = 'auto';
       audio.src = item.src;
 
-      // Also trigger a fetch to warm up the browser's HTTP cache
       fetch(item.src, { mode: 'cors' })
         .then(() => {
           clearTimeout(timeout);
@@ -154,11 +193,6 @@ function preloadAudio(item) {
   });
 }
 
-/**
- * Preload all required game assets with live progress updates
- * @param {Function} onProgress - Callback with ({ loaded, total, percent, currentItem })
- * @returns {Promise<boolean>} Resolves when all assets are loaded
- */
 export function preloadAllAssets(onProgress = () => {}) {
   if (isPreloadCompleted) {
     onProgress({
@@ -180,15 +214,12 @@ export function preloadAllAssets(onProgress = () => {}) {
   ];
 
   const total = allItems.length;
-  let loaded = 0;
 
   preloadPromise = new Promise((resolve) => {
-    // Process items in parallel chunks to maximize throughput without bottlenecking
     let completedCount = 0;
 
     const handleItemFinished = (item) => {
       completedCount++;
-      loaded++;
       const percent = Math.min(100, Math.round((completedCount / total) * 100));
 
       onProgress({
@@ -204,7 +235,6 @@ export function preloadAllAssets(onProgress = () => {}) {
       }
     };
 
-    // Run parallel preloading
     allItems.forEach((item) => {
       const promise = item.type === 'image' ? preloadImage(item) : preloadAudio(item);
       promise.then(() => handleItemFinished(item));

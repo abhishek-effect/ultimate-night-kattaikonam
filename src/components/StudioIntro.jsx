@@ -115,7 +115,7 @@ export default function StudioIntro({ onFinish }) {
         className={`absolute inset-0 bg-cover bg-center pointer-events-none transition-none ${
           isSwitchGlitching ? '-translate-x-3 translate-y-2 scale-105 filter contrast-175 brightness-135 saturate-150 -skew-x-1' : 'menu-bg-shaky filter contrast-115'
         } ${activeMenuImg === 1 ? 'opacity-35 z-0' : 'opacity-0 z-0'}`}
-        style={{ backgroundImage: `url('./assets/images/main-menu-new.png')` }}
+        style={{ backgroundImage: `url('./Fnak photos/main-menu-new.png')` }}
       />
 
       {/* Violent Glitch Slice & Flash overlay during 1.5s twitch */}

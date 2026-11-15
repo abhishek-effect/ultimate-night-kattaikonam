@@ -1,10 +1,10 @@
 {
-  "name": "Five Nights at Kattaikonam",
-  "short_name": "FNAK",
+  "name": "Ultimate Night @ Kattaikonam",
+  "short_name": "UNAK",
   "description": "Survive the night shift at Kattaikonam from 12:00 AM to 6:00 AM.",
   "start_url": "./",
   "scope": "./",
-  "id": "fnak-game",
+  "id": "unak-game",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#000000",

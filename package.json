@@ -1,10 +1,11 @@
 {
-  "name": "fnak-game",
+  "name": "ultimate-night-kattaikonam",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/sync-assets.js && vite",
+    "prebuild": "node scripts/sync-assets.js",
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
