@@ -1,4 +1,4 @@
-# 🐻 Five Nights At Kattaikonam (FNAK) v1.0
+# 🐻 Ultimate Custom Night @ Kattaikonam
 
 A FNAF-inspired web survival horror game built with **React**, **Vite**, **Tailwind CSS**, and the **HTML5 Web Audio API**.
 
