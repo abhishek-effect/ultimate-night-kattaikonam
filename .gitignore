@@ -3,3 +3,5 @@ dist/
 *.exe
 .DS_Store
 *.log
+guide.txt
+

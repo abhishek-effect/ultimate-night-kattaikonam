@@ -1,14 +1,17 @@
-Inspired by Five Nights at Freddy's by Scott Cawthon
+Inspired by Five Nights at Freddy's and Ultimate Custom Night by Scott Cawthon
 
 Lead Developer: Pinky
 Creative Head: Dip-u
 
-Photos:
-Devkrishna
+Enemies:
 Aadesh
 Abhishek
+Devkrishna
 Johann
+Ritul
+Ryan
+Sijinil
 
-Audio from Pixabay & Classroom Recordings
-
+Audio from Pixabay, Classroom Recordings and Myinstants
+PC Wallpaper from Wallpaper Clan
 Coded by Gemini
